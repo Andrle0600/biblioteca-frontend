@@ -1,0 +1,105 @@
+<div class="form-container container mt-5">
+  <h2 class="mb-4 text-center">Registro de Usuario - Biblioteca Nacional</h2>
+
+  <!-- Mostrar error general -->
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <form [formGroup]="registroForm" (ngSubmit)="onSubmit()">
+    <!-- DNI -->
+    <div class="mb-3">
+      <label for="dni" class="form-label">DNI *</label>
+      <input type="text" id="dni" class="form-control" formControlName="dni" required pattern="[0-9]{8}" />
+      <div *ngIf="registroForm.get('dni')?.invalid && registroForm.get('dni')?.touched" class="text-danger">
+        <div *ngIf="registroForm.get('dni')?.errors?.['required']">El DNI es requerido</div>
+        <div *ngIf="registroForm.get('dni')?.errors?.['pattern']">El DNI debe tener 8 dígitos</div>
+      </div>
+    </div>
+
+    <!-- Nombres y Apellidos -->
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label for="nombres" class="form-label">Nombres *</label>
+        <input type="text" id="nombres" class="form-control" formControlName="nombres" required />
+        <div *ngIf="registroForm.get('nombres')?.invalid && registroForm.get('nombres')?.touched" class="text-danger">
+          Los nombres son requeridos
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="apellidos" class="form-label">Apellidos *</label>
+        <input type="text" id="apellidos" class="form-control" formControlName="apellidos" required />
+        <div *ngIf="registroForm.get('apellidos')?.invalid && registroForm.get('apellidos')?.touched"
+          class="text-danger">
+          Los apellidos son requeridos
+        </div>
+      </div>
+    </div>
+
+    <!-- Fecha de nacimiento y Género -->
+    <div class="row g-3 mt-3">
+      <div class="col-md-6">
+        <label for="fechaNacimiento" class="form-label">Fecha de nacimiento *</label>
+        <input type="date" id="fechaNacimiento" class="form-control" formControlName="fechaNacimiento" required />
+        <div *ngIf="registroForm.get('fechaNacimiento')?.invalid && registroForm.get('fechaNacimiento')?.touched"
+          class="text-danger">
+          La fecha de nacimiento es requerida
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="genero" class="form-label">Género *</label>
+        <select id="genero" class="form-select" formControlName="genero" required>
+          <option value="">Seleccione</option>
+          <option value="masculino">Masculino</option>
+          <option value="femenino">Femenino</option>
+          <option value="otro">Otro</option>
+        </select>
+        <div *ngIf="registroForm.get('genero')?.invalid && registroForm.get('genero')?.touched" class="text-danger">
+          El género es requerido
+        </div>
+      </div>
+    </div>
+
+    <!-- Correo y Teléfono -->
+    <div class="row g-3 mt-3">
+      <div class="col-md-6">
+        <label for="username" class="form-label">Correo electrónico *</label>
+        <input type="email" id="username" class="form-control" formControlName="username" required />
+        <div *ngIf="registroForm.get('username')?.invalid && registroForm.get('username')?.touched" class="text-danger">
+          <div *ngIf="registroForm.get('username')?.errors?.['required']">El correo es requerido</div>
+          <div *ngIf="registroForm.get('username')?.errors?.['email']">Formato de correo inválido</div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="telefono" class="form-label">Teléfono *</label>
+        <input type="tel" id="telefono" class="form-control" formControlName="telefono" required pattern="[0-9]{9}" />
+        <div *ngIf="registroForm.get('telefono')?.invalid && registroForm.get('telefono')?.touched" class="text-danger">
+          <div *ngIf="registroForm.get('telefono')?.errors?.['required']">El teléfono es requerido</div>
+          <div *ngIf="registroForm.get('telefono')?.errors?.['pattern']">El teléfono debe tener 9 dígitos</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dirección -->
+    <div class="mb-3 mt-3">
+      <label for="direccion" class="form-label">Dirección *</label>
+      <input type="text" id="direccion" class="form-control" formControlName="direccion" required />
+      <div *ngIf="registroForm.get('direccion')?.invalid && registroForm.get('direccion')?.touched" class="text-danger">
+        La dirección es requerida
+      </div>
+    </div>
+
+    <!-- Contraseña -->
+    <div class="mb-3 mt-3">
+      <label for="password" class="form-label">Contraseña *</label>
+      <input type="password" id="password" class="form-control" formControlName="password" required minlength="6" />
+      <div *ngIf="registroForm.get('password')?.invalid && registroForm.get('password')?.touched" class="text-danger">
+        <div *ngIf="registroForm.get('password')?.errors?.['required']">La contraseña es requerida</div>
+        <div *ngIf="registroForm.get('password')?.errors?.['minlength']">Mínimo 6 caracteres</div>
+      </div>
+    </div>
+
+    <!-- Botón de registro -->
+    <div class="text-center mt-4">
+      <button type="submit" class="btn btn-primary" [disabled]="!registroForm.valid">Registrarse</button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,50 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.sidebar {
+    background-color: white;
+    height: 100%;
+    border-right: 1px solid #ddd;
+}
+
+.sidebar .nav-link {
+    color: #007bff;
+    font-weight: 500;
+}
+
+.sidebar .nav-link.active {
+    background-color: #007bff;
+    color: white;
+    border-radius: 8px;
+}
+
+.content-section {
+    padding: 30px;
+}
+
+.card {
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);
+}
+
+.card-title {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.card-subtitle {
+    font-size: 0.95rem;
+    color: #6c757d;
+}
+
+.card-text {
+    font-size: 0.95rem;
+}
+
+i{
+    color: #007bff;
+    font-weight: bolder;
+    font-size: 1.5rem;
+}

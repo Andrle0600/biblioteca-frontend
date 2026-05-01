@@ -1,0 +1,28 @@
+.form-container {
+    max-width: 700px;
+    margin: 40px auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.btn-registro {
+    background-color: #28a745;
+    /* Verde */
+    color: white;
+    padding: 14px 30px;
+    font-size: 1.2rem;
+    font-weight: 700; /* Texto más grueso */
+    border: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-registro:hover {
+    background-color: #218838;
+}

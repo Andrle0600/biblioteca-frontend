@@ -1,0 +1,61 @@
+<div class="container my-5">
+  <a routerLink="/catalogo" class="btn btn-danger btn-sm">
+    Volver al Catálogo
+  </a>
+
+  <h2 class="mb-4 fw-bold">Detalle libro</h2>
+
+  <div class="book-detail">
+    <div class="row">
+      <!-- Columna de imagen y datos -->
+      <div class="col-md-4 text-center mb-4 mb-md-0" *ngIf="libro">
+        <div class="position-relative d-inline-block">
+          <img [src]="libro.imagenUrl" [alt]="libro.titulo" class="book-image mb-3" />
+
+          <!-- Superposición si no hay ejemplares -->
+          <div *ngIf="contarDisponibles() === 0" class="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-75
+            d-flex align-items-center justify-content-center text-white fw-bold fs-6">
+            No disponible
+          </div>
+
+        </div>
+
+        <h5 class="fw-bold">{{ libro.titulo }}</h5>
+        <p class="mb-1"><strong>Autor:</strong> {{ libro.autor }}</p>
+        <p class="mb-1"><strong>Fecha de publicación:</strong> {{ libro.fechaPublicacion }}</p>
+        <p class="mb-1"><strong>Editorial:</strong> {{ libro.editorial }}</p>
+        <p class="mb-3"><strong>ISBN:</strong> {{ libro.isbn }}</p>
+
+        <button *ngIf="authService.isAuthenticated(); else loginButton" class="btn btn-purple w-100"
+          [routerLink]="['/prestamo', libro.slug]"
+          [disabled]="contarDisponibles() === 0">
+          Solicitar préstamo
+        </button>
+
+        <ng-template #loginButton>
+          <button type="button" class="btn btn-purple w-100" data-bs-toggle="modal" data-bs-target="#loginModal">
+            Inicie sesión para solicitar
+          </button>
+        </ng-template>
+      </div>
+
+      <!-- Columna de descripción y disponibilidad -->
+      <div class="col-md-8" *ngIf="libro">
+        <h5 class="section-title">Descripción</h5>
+        <p style="text-align: justify;">
+          {{ libro.descripcion }}
+        </p>
+        <p class="mb-1"><strong>Genero: </strong><span class="btn btn-info">{{ libro.genero }}</span></p>
+
+        <h5 class="section-title">Disponibilidad</h5>
+        <div class="form-check mb-2">
+          <p class="text-muted ms-3">
+            <strong>Ejemplares disponibles:</strong> {{ contarDisponibles() }}
+          </p>
+          <div class="mt-3">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

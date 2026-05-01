@@ -1,0 +1,79 @@
+<div class="voucher-container mx-auto bg-white p-4 rounded shadow-sm mt-4">
+  <!-- Botón de volver (no-imprimir para ocultar al imprimir) -->
+  <a [routerLink]="['/detalle', libro?.slug]" class="btn btn-danger btn-sm mb-3 no-imprimir">
+    <i class="bi bi-arrow-left"></i> Volver a detalle
+  </a>
+
+  <!-- Título y pasos -->
+  <h2 class="mb-4 fw-bold text-center">Solicitar préstamo</h2>
+
+  <div class="alert alert-info no-imprimir">
+    <h6 class="fw-bold">Pasos a seguir</h6>
+    <ol class="mb-0">
+      <li>Complete los datos del préstamo</li>
+      <li>Confirme la reserva</li>
+      <li>Imprima el voucher y preséntelo en biblioteca</li>
+    </ol>
+  </div>
+
+  <hr class="no-imprimir">
+
+  <!-- Formulario de préstamo -->
+  <form (ngSubmit)="enviarReserva()" #reservaForm="ngForm">
+    <!-- Sección Libro -->
+    <div class="mb-3 info-block" *ngIf="libro">
+      <h6 class="bg-light text-dark text-center py-1 border rounded">Libro</h6>
+      <p>Nombre: <span>{{ libro.titulo }}</span></p>
+      <p>Autor: <span>{{ libro.autor }}</span></p>
+    </div>
+
+    <!-- Sección Usuario -->
+    <div class="mb-3 info-block">
+      <h6 class="bg-light text-dark text-center py-1 border rounded">Usuario</h6>
+      <p>Nombre y Apellidos: <span>{{ usuario.nombres }} {{ usuario.apellidos }}</span></p>
+      <p>DNI: <span>{{ usuario.dni }}</span></p>
+      <p>Correo: <span>{{ usuario.username }}</span></p>
+    </div>
+
+    <!-- Sección Datos del Préstamo -->
+    <div class="mb-4 info-block">
+      <h6 class="bg-light text-dark text-center py-1 border rounded">Datos del préstamo</h6>
+      <p>Código del ejemplar: <span>{{ ejemplar?.codigoEjemplar }}</span></p>
+      <p>Ubicación física: <span>Estantería {{ ejemplar?.ubicacion }}</span></p>
+
+      <p class="d-flex align-items-center">
+        <span>Día de Recojo:</span>
+        <input type="date" class="form-control form-control-sm ms-2" [(ngModel)]="fechaRecojo" [min]="minDate"
+          [max]="maxDate" name="fechaRecojo" required [disabled]="reservaSuccess">
+      </p>
+      <small class="text-muted">Seleccione una fecha entre mañana y el {{ maxDate | date:"d 'de' MMMM" }}</small>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="d-flex gap-2 no-imprimir">
+      <button type="submit" class="btn btn-primary flex-grow-1"
+        [disabled]="!reservaForm.form.valid || isLoading || reservaSuccess">
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+        {{ reservaSuccess ? 'Reserva Confirmada' : (isLoading ? 'Procesando...' : 'Confirmar Reserva') }}
+      </button>
+
+      <button type="button" class="btn btn-outline-secondary" (click)="imprimir()" [disabled]="!reservaSuccess">
+        <i class="bi bi-printer"></i>
+      </button>
+    </div>
+
+    <div *ngIf="reservaSuccess" class="alert alert-success mt-3 no-imprimir">
+      <i class="bi bi-check-circle-fill"></i> Reserva registrada exitosamente.
+
+      <div class="mt-3">
+        <button class="btn btn-success" (click)="irAMiCuenta()">
+          <i class="bi bi-box-arrow-in-right"></i> Ir a mi cuenta
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="errorMessage" class="alert alert-danger mt-3 no-imprimir">
+      <i class="bi bi-exclamation-triangle-fill"></i> {{ errorMessage }}
+    </div>
+  </form>
+</div>

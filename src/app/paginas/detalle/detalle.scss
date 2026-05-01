@@ -1,0 +1,31 @@
+    .book-detail {
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    .book-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .btn-purple {
+      background-color: #6c2bd9;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .btn-purple:hover {
+      background-color: #5a1cc3;
+    }
+
+    .form-check-label {
+      font-weight: 500;
+    }
+
+    .section-title {
+      font-weight: 600;
+      margin-top: 2rem;
+    }

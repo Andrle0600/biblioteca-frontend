@@ -1,0 +1,19 @@
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-color: #ffffff;
+    background-image: url('/public/fondo.png');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    z-index: 1;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(255, 255, 255, 0.4);
+    /* Blanco con menor opacidad */
+    z-index: -1;
+}

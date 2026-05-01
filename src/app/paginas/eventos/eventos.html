@@ -1,0 +1,55 @@
+<!-- Título -->
+<div class="container mt-5 mb-4">
+    <h2 class="fw-bold text-primary text-center custom-titulo pb-2">Eventos y Actividades Culturales</h2>
+    <p class="text-center text-muted fs-5">Participa en nuestras iniciativas educativas, artísticas y recreativas.</p>
+</div>
+
+<!-- Evento Especial -->
+<div class="container mb-5">
+    <div class="row destacado align-items-center p-4 shadow">
+        <div class="col-md-8">
+            <h4 class="fw-bold">{{ eventosEspeciales[0].titulo }}</h4>
+            <p>{{ eventosEspeciales[0].descripcion }}</p>
+            <p class="mb-0"><i class="bi bi-calendar-event"></i> {{ eventosEspeciales[0].fecha }}</p>
+        </div>
+        <div class="col-md-4 text-end d-none d-md-block">
+            <img [src]="eventosEspeciales[0].imagen" alt="Evento Especial" class="img-fluid rounded-3">
+        </div>
+    </div>
+</div>
+
+<!-- Tarjetas de Eventos -->
+<div class="container mb-5">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col" *ngFor="let evento of eventos">
+            <div class="card evento-card shadow-sm h-100 rounded-4">
+                <img [src]="evento.imagen" class="card-img-top" [alt]="evento.titulo">
+                <div class="card-body">
+                    <h5 class="card-title text-primary fw-bold">{{ evento.titulo }}</h5>
+                    <p class="card-text">{{ evento.descripcion }}</p>
+                </div>
+                <div class="card-footer bg-light text-muted text-center">
+                    <i class="bi bi-clock"></i> {{ evento.horario }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Calendario -->
+<div class="container calendar-container mb-5">
+    <div class="calendar-header mb-3 d-flex justify-content-between align-items-center">
+        <button class="btn btn-outline-primary btn-sm" (click)="prevMonth()"><i class="bi bi-chevron-left"></i></button>
+        <h4 class="fw-bold text-center mb-0">{{ calendarTitle }}</h4>
+        <button class="btn btn-outline-primary btn-sm" (click)="nextMonth()"><i
+                class="bi bi-chevron-right"></i></button>
+    </div>
+
+    <div class="calendar-grid">
+        <div *ngFor="let day of days" class="calendar-cell"
+            [class.today]="day.day === currentDate.getDate() && calendarTitle.includes(monthNames[currentDate.getMonth()])">
+            <div class="calendar-day">{{ day.day }}</div>
+            <div *ngIf="day.events.length > 0" class="event-bullet" title="{{ day.events.join(', ') }}"></div>
+        </div>
+    </div>
+</div>

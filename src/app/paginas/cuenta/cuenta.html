@@ -1,0 +1,60 @@
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3 col-lg-2 p-3 sidebar">
+      <h4 class="text-primary mb-4">Mi Cuenta</h4>
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link active" routerLink="/cuenta"><i class="bi bi-person-fill me-2"></i>Yo</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/mis-reservas"><i class="bi bi-calendar3 me-2"></i>Mis Préstamos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" (click)="logout()"><i class="bi bi-box-arrow-left me-2"></i>Cerrar Sesión</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Perfil y Libros Reservados -->
+    <div class="col-md-9 col-lg-10 profile-section">
+      <h2 class="text-primary fw-bold">Mi Información</h2>
+
+      <div *ngIf="usuario; else cargando">
+        <div class="row mt-4">
+          <div class="col-md-6">
+            <p><strong>DNI:</strong> {{ usuario.dni }}</p>
+            <p><strong>Correo:</strong> {{ usuario.username }}</p>
+            <p><strong>Teléfono:</strong> {{ usuario.telefono }}</p>
+            <p><strong>Nombres:</strong> {{ usuario.nombres }}</p>
+            <p><strong>Apellidos:</strong> {{ usuario.apellidos }}</p>
+            <p><strong>Fecha de nacimiento:</strong> {{ usuario.fechaNacimiento | date }}</p>
+            <p><strong>Dirección:</strong> {{ usuario.direccion }}</p>
+          </div>
+        </div>
+
+        <div class="reserved-books mt-4">
+          <h4 class="text-primary fw-bold">Libros Reservados</h4>
+
+          <div *ngIf="reservas.length > 0; else noReservas">
+            <div *ngFor="let reserva of reservas" class="book-item mt-2">
+              <h6><i class="bi bi-book"></i> {{ reserva.ejemplar.libro.titulo }}</h6>
+              <small>Autor: {{ reserva.ejemplar.libro.autor }}</small><br />
+              <small>Fecha de reserva: {{ reserva.fechaReserva | date:"dd 'de' MMMM 'del' yyyy" }}</small>
+            </div>
+          </div>
+
+          <ng-template #noReservas>
+            <p>No tienes libros reservados.</p>
+          </ng-template>
+        </div>
+      </div>
+
+      <ng-template #cargando>
+        <p>Cargando información...</p>
+      </ng-template>
+
+      <div *ngIf="error" class="alert alert-danger mt-3">{{ error }}</div>
+    </div>
+  </div>
+</div>
