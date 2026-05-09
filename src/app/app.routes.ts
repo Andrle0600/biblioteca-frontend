@@ -100,8 +100,8 @@ export const routes: Routes = [
             }, {
                 path: 'historial',
                 component: Historial
-            },{
-                path:'atrasadas',
+            }, {
+                path: 'atrasadas',
                 component: Atrasadas
             }
         ]

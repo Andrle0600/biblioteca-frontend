@@ -11,7 +11,7 @@ describe('PrincipalNavbar', () => {
     await TestBed.configureTestingModule({
       imports: [PrincipalNavbarComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(PrincipalNavbarComponent);
     component = fixture.componentInstance;

@@ -73,10 +73,10 @@
     </div>
 
     <!-- Mostrar si NO está autenticado -->
-      <button *ngIf="!usuarioAutenticado" type="button" class="btn btn-primary boton-login" data-bs-toggle="modal"
-        data-bs-target="#loginModal">
-        <i class="bi bi-person-circle icono-login"></i>
-      </button>
+    <button *ngIf="!usuarioAutenticado" type="button" class="btn btn-primary boton-login" data-bs-toggle="modal"
+      data-bs-target="#loginModal">
+      <i class="bi bi-person-circle icono-login"></i>
+    </button>
 
     <!-- Mostrar si SÍ está autenticado -->
     <div *ngIf="usuarioAutenticado" class="nav-item dropdown boton-login2">
