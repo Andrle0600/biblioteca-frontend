@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Observable } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
+import { FontSizeService, FontSize } from '../../services/font-size.service';
 
 declare var bootstrap: any;
 
@@ -20,11 +21,18 @@ export class PrincipalNavbarComponent implements OnInit {
   loginForm!: FormGroup;
   loginError: string | null = null;
 
+  // Accesibilidad
+  currentFontSize$!: Observable<FontSize>;
+  mobileMenuOpen = false;
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,  // Usa el AuthService
-    private router: Router
-  ) { }
+    private router: Router,
+    public fontSizeService: FontSizeService
+  ) {
+    this.currentFontSize$ = fontSizeService.currentSize$;
+  }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -72,4 +80,11 @@ export class PrincipalNavbarComponent implements OnInit {
     this.authService.logout();
   }
 
+  setFontSize(size: FontSize) {
+    this.fontSizeService.setFontSize(size);
+  }
+
+  toggleMobileFontMenu() {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
 }

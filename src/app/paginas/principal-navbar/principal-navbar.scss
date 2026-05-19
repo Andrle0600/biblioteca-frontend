@@ -66,10 +66,13 @@ body::before {
 .boton-login {
     background-color: #003366;
     border: none;
-    padding: 8px 12px;
-    border-radius: 50px;
-    width: 60px;
-    height: 60px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 3.75rem;
+    height: 3.75rem;
     transition: background-color 0.3s ease;
 }
 
@@ -86,6 +89,183 @@ body::before {
     margin-left: auto;
     /* Escritorio: derecha */
 }
+
+/* =============================================================
+   SELECTOR DE TAMAÑO DE FUENTE – ESCRITORIO
+   ============================================================= */
+.font-size-control {
+    gap: 0.4rem;
+}
+
+.font-size-label {
+    color: #ffffff;
+    font-size: 1.1rem;
+    opacity: 0.85;
+}
+
+.font-size-group {
+    border-radius: 50px;
+    overflow: hidden;
+    border: 1.5px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+.btn-font-size {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #e0eaff;
+    font-weight: 700;
+    font-size: 0.78rem;
+    padding: 4px 11px;
+    border: none;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+    letter-spacing: 0.5px;
+
+    &:last-child {
+        border-right: none;
+    }
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.22);
+        color: #ffffff;
+        transform: none;
+    }
+
+    &.active {
+        background-color: #D22670;
+        color: #ffffff;
+        box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.3);
+    }
+}
+
+/* =============================================================
+   WIDGET FLOTANTE (FAB) DE ACCESIBILIDAD – SOLO MÓVIL
+   ============================================================= */
+.font-fab-wrapper {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Botón principal redondo */
+.font-fab-btn {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #004080, #003366);
+    color: #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(0, 64, 128, 0.45);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    position: relative;
+
+    &:hover,
+    &:focus {
+        transform: scale(1.08);
+        box-shadow: 0 6px 24px rgba(0, 64, 128, 0.6);
+        outline: none;
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+}
+
+/* Badge que muestra el tamaño activo */
+.font-fab-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #D22670;
+    color: #fff;
+    border-radius: 50%;
+    width: 1.25rem;
+    height: 1.25rem;
+    font-size: 0.6rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid #fff;
+    letter-spacing: 0;
+}
+
+/* Contenedor de las opciones desplegables */
+.font-fab-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    /* Glassmorphism */
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 30px;
+    padding: 0.5rem 0.4rem;
+    box-shadow: 0 8px 32px rgba(0, 64, 128, 0.25);
+
+    /* Animación de apertura/cierre */
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    padding: 0 0.4rem;
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.25s ease,
+                padding 0.3s ease;
+
+    &.open {
+        max-height: 12rem;
+        opacity: 1;
+        padding: 0.5rem 0.4rem;
+    }
+}
+
+/* Cada opción individual dentro del menú móvil */
+.font-fab-option {
+    width: 2.625rem;
+    height: 2.625rem;
+    border-radius: 50%;
+    border: 1.5px solid rgba(0, 64, 128, 0.3);
+    background: rgba(255, 255, 255, 0.65);
+    color: #003366;
+    font-weight: 800;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
+    letter-spacing: 0.5px;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.9);
+        transform: scale(1.1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    &:active {
+        transform: scale(0.92);
+    }
+
+    &.active {
+        background: #D22670;
+        color: #ffffff;
+        border-color: #D22670;
+        box-shadow: 0 3px 10px rgba(210, 38, 112, 0.4);
+    }
+}
+
 
 /* RESPONSIVO */
 @media (max-width: 992px) {

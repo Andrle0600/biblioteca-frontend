@@ -1,1 +1,32 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* ============================================================
+   ACCESIBILIDAD: Escalado de Tamaño de Fuente (S / M / L)
+   - Funciona con rem (Bootstrap + estilos propios).
+   - NO afecta imágenes, iconos ni layouts estructurales.
+   ============================================================ */
+
+html {
+  /* Transición suave al alternar tamaños */
+  transition: font-size 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Nivel S – tamaño base estándar (predeterminado, 16px) */
+html.font-scale-s {
+  font-size: 100%;
+}
+
+/* Nivel M – aumento moderado (~18px base) */
+html.font-scale-m {
+  font-size: 125%;
+}
+
+/* Nivel L – aumento máximo accesible (~20px base) */
+html.font-scale-l {
+  font-size: 150%;
+}
+
+/* Prevenir scroll horizontal cuando el texto aumenta */
+body {
+  overflow-x: hidden;
+}

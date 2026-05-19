@@ -40,8 +40,72 @@
                     </a>
                 </li>
             </ul>
+
+            <!-- ====== SELECTOR DE TAMAÑO DE FUENTE – ESCRITORIO (≥992px) ====== -->
+            <div class="dash-font-control d-none d-lg-flex align-items-center ms-auto" aria-label="Tamaño de texto">
+                <span class="dash-font-label me-2">
+                    <i class="bi bi-type"></i>
+                </span>
+                <div class="btn-group dash-font-group" role="group" aria-label="Tamaño de fuente">
+                    <button type="button"
+                        class="btn btn-dash-font"
+                        [class.active]="(currentFontSize$ | async) === 'S'"
+                        (click)="setFontSize('S')"
+                        title="Texto estándar"
+                        aria-label="Texto estándar">S</button>
+                    <button type="button"
+                        class="btn btn-dash-font"
+                        [class.active]="(currentFontSize$ | async) === 'M'"
+                        (click)="setFontSize('M')"
+                        title="Texto mediano"
+                        aria-label="Texto mediano">M</button>
+                    <button type="button"
+                        class="btn btn-dash-font"
+                        [class.active]="(currentFontSize$ | async) === 'L'"
+                        (click)="setFontSize('L')"
+                        title="Texto grande"
+                        aria-label="Texto grande">L</button>
+                </div>
+            </div>
         </div>
     </div>
 </nav>
 
 <router-outlet></router-outlet>
+
+<!-- ====== WIDGET FLOTANTE (FAB) DE ACCESIBILIDAD – SOLO MÓVIL (<992px) ====== -->
+<div class="dash-font-fab-wrapper d-lg-none" id="dash-font-fab-wrapper">
+    <!-- Opciones desplegables -->
+    <div class="dash-font-fab-menu" [class.open]="mobileMenuOpen" aria-label="Opciones de tamaño de texto">
+        <button type="button"
+            class="dash-font-fab-option"
+            [class.active]="(currentFontSize$ | async) === 'L'"
+            (click)="setFontSize('L'); mobileMenuOpen = false"
+            title="Texto grande"
+            aria-label="Texto grande">L</button>
+        <button type="button"
+            class="dash-font-fab-option"
+            [class.active]="(currentFontSize$ | async) === 'M'"
+            (click)="setFontSize('M'); mobileMenuOpen = false"
+            title="Texto mediano"
+            aria-label="Texto mediano">M</button>
+        <button type="button"
+            class="dash-font-fab-option"
+            [class.active]="(currentFontSize$ | async) === 'S'"
+            (click)="setFontSize('S'); mobileMenuOpen = false"
+            title="Texto estándar"
+            aria-label="Texto estándar">S</button>
+    </div>
+
+    <!-- Botón principal FAB -->
+    <button type="button"
+        class="dash-font-fab-btn"
+        (click)="toggleMobileFontMenu()"
+        [attr.aria-expanded]="mobileMenuOpen"
+        aria-label="Cambiar tamaño de texto"
+        title="Accesibilidad: tamaño de texto">
+        <i class="bi bi-type-h1" *ngIf="!mobileMenuOpen"></i>
+        <i class="bi bi-x-lg" *ngIf="mobileMenuOpen"></i>
+        <span class="dash-font-fab-badge">{{ currentFontSize$ | async }}</span>
+    </button>
+</div>
