@@ -1,19 +1,10 @@
 <div class="form-container container mt-5">
-  <h2 class="mb-4 text-center">Registro de Usuario - Biblioteca Nacional</h2>
+  <h2 class="mb-4 text-center">Registro de Nuevo Usuario</h2>
 
   <!-- Mostrar error general -->
   <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
   <form [formGroup]="registroForm" (ngSubmit)="onSubmit()">
-    <!-- DNI -->
-    <div class="mb-3">
-      <label for="dni" class="form-label">DNI *</label>
-      <input type="text" id="dni" class="form-control" formControlName="dni" required pattern="[0-9]{8}" />
-      <div *ngIf="registroForm.get('dni')?.invalid && registroForm.get('dni')?.touched" class="text-danger">
-        <div *ngIf="registroForm.get('dni')?.errors?.['required']">El DNI es requerido</div>
-        <div *ngIf="registroForm.get('dni')?.errors?.['pattern']">El DNI debe tener 8 dígitos</div>
-      </div>
-    </div>
 
     <!-- Nombres y Apellidos -->
     <div class="row g-3">
@@ -30,6 +21,26 @@
         <div *ngIf="registroForm.get('apellidos')?.invalid && registroForm.get('apellidos')?.touched"
           class="text-danger">
           Los apellidos son requeridos
+        </div>
+      </div>
+    </div>
+
+    <!-- DNI y teléfono -->
+    <div class="row g-3 mt-3">
+      <div class="col-md-6">
+        <label for="dni" class="form-label">DNI *</label>
+        <input type="text" id="dni" class="form-control" formControlName="dni" required pattern="[0-9]{8}" />
+        <div *ngIf="registroForm.get('dni')?.invalid && registroForm.get('dni')?.touched" class="text-danger">
+          <div *ngIf="registroForm.get('dni')?.errors?.['required']">El DNI es requerido</div>
+          <div *ngIf="registroForm.get('dni')?.errors?.['pattern']">El DNI debe tener 8 dígitos</div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="telefono" class="form-label">Teléfono *</label>
+        <input type="tel" id="telefono" class="form-control" formControlName="telefono" required pattern="[0-9]{9}" />
+        <div *ngIf="registroForm.get('telefono')?.invalid && registroForm.get('telefono')?.touched" class="text-danger">
+          <div *ngIf="registroForm.get('telefono')?.errors?.['required']">El teléfono es requerido</div>
+          <div *ngIf="registroForm.get('telefono')?.errors?.['pattern']">El teléfono debe tener 9 dígitos</div>
         </div>
       </div>
     </div>
@@ -58,7 +69,7 @@
       </div>
     </div>
 
-    <!-- Correo y Teléfono -->
+    <!-- Correo y contraseña -->
     <div class="row g-3 mt-3">
       <div class="col-md-6">
         <label for="username" class="form-label">Correo electrónico *</label>
@@ -69,11 +80,11 @@
         </div>
       </div>
       <div class="col-md-6">
-        <label for="telefono" class="form-label">Teléfono *</label>
-        <input type="tel" id="telefono" class="form-control" formControlName="telefono" required pattern="[0-9]{9}" />
-        <div *ngIf="registroForm.get('telefono')?.invalid && registroForm.get('telefono')?.touched" class="text-danger">
-          <div *ngIf="registroForm.get('telefono')?.errors?.['required']">El teléfono es requerido</div>
-          <div *ngIf="registroForm.get('telefono')?.errors?.['pattern']">El teléfono debe tener 9 dígitos</div>
+        <label for="password" class="form-label">Contraseña *</label>
+        <input type="password" id="password" class="form-control" formControlName="password" required minlength="6" />
+        <div *ngIf="registroForm.get('password')?.invalid && registroForm.get('password')?.touched" class="text-danger">
+          <div *ngIf="registroForm.get('password')?.errors?.['required']">La contraseña es requerida</div>
+          <div *ngIf="registroForm.get('password')?.errors?.['minlength']">Mínimo 6 caracteres</div>
         </div>
       </div>
     </div>
@@ -84,16 +95,6 @@
       <input type="text" id="direccion" class="form-control" formControlName="direccion" required />
       <div *ngIf="registroForm.get('direccion')?.invalid && registroForm.get('direccion')?.touched" class="text-danger">
         La dirección es requerida
-      </div>
-    </div>
-
-    <!-- Contraseña -->
-    <div class="mb-3 mt-3">
-      <label for="password" class="form-label">Contraseña *</label>
-      <input type="password" id="password" class="form-control" formControlName="password" required minlength="6" />
-      <div *ngIf="registroForm.get('password')?.invalid && registroForm.get('password')?.touched" class="text-danger">
-        <div *ngIf="registroForm.get('password')?.errors?.['required']">La contraseña es requerida</div>
-        <div *ngIf="registroForm.get('password')?.errors?.['minlength']">Mínimo 6 caracteres</div>
       </div>
     </div>
 

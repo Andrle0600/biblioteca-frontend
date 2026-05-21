@@ -59,7 +59,8 @@ export class PrincipalNavbarComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al iniciar sesión:', error);
-        this.loginError = 'Credenciales incorrectas o error de conexión.';
+        this.loginError = 'Credenciales incorrectas';
+        // o error de conexión.
       }
     });
   }
