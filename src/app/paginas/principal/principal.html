@@ -263,15 +263,3 @@
             </div>
         </div>
     </div>
-    <!-- Script para auto-ocultar el toast después de 5 segundos -->
-    <script th:inline="javascript">
-        window.addEventListener('DOMContentLoaded', () => {
-            const registroToast = document.getElementById('registroToast');
-            if (registroToast) {
-                setTimeout(() => {
-                    const toast = bootstrap.Toast.getInstance(registroToast);
-                    if (toast) toast.hide();
-                }, 5000);
-            }
-        });
-    </script>

@@ -1,1 +1,40 @@
 <router-outlet></router-outlet>
+
+<!-- Contenedor global de Toasts -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+  @for (toast of toastService.toasts; track toast.id) {
+    <div
+      class="toast app-toast show"
+      [ngClass]="{
+        'app-toast--success': toast.type === 'success',
+        'app-toast--error':   toast.type === 'error',
+        'app-toast--info':    toast.type === 'info'
+      }"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+    >
+      <div class="toast-header app-toast__header">
+        <span class="app-toast__icon me-2">
+          @if (toast.type === 'success') { ✅ }
+          @if (toast.type === 'error')   { ❌ }
+          @if (toast.type === 'info')    { ℹ️ }
+        </span>
+        <strong class="me-auto app-toast__title">
+          @if (toast.type === 'success') { ¡Operación exitosa! }
+          @if (toast.type === 'error')   { Error }
+          @if (toast.type === 'info')    { Información }
+        </strong>
+        <button
+          type="button"
+          class="btn-close app-toast__close"
+          aria-label="Cerrar"
+          (click)="toastService.remove(toast.id)"
+        ></button>
+      </div>
+      <div class="toast-body app-toast__body">
+        {{ toast.message }}
+      </div>
+    </div>
+  }
+</div>

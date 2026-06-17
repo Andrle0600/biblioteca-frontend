@@ -3,13 +3,15 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-registrar',
   templateUrl: './registrar.html',
   styleUrls: ['./registrar.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, HttpClientModule],
 })
 export class Registrar {
   registroForm: FormGroup;
@@ -18,7 +20,8 @@ export class Registrar {
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private toastService: ToastService
   ) {
     this.registroForm = this.fb.group({
       dni: ['', Validators.required],
@@ -39,9 +42,12 @@ export class Registrar {
       return;
     }
 
-this.http.post('http://localhost:8080/api/auth/registrar', this.registroForm.value, { responseType: 'text' })
+    this.http.post('http://localhost:8080/api/auth/registrar', this.registroForm.value, { responseType: 'text' })
       .subscribe({
-        next: () => this.router.navigate(['/']),
+        next: () => {
+          this.toastService.success('¡Registro exitoso! Ya puede iniciar sesión.');
+          this.router.navigate(['/']);
+        },
         error: (err) => {
           console.error('Error del servidor:', err);
           if (err.error && typeof err.error === 'string') {
