@@ -34,12 +34,7 @@ const NIVELES = ['E', 'D', 'C', 'B', 'A'] as const;
 /** Límite de ejemplares por celda de estantería */
 const LIMITE_CAPACIDAD = 5;
 
-/**
- * Mapeo de código de estantería a los campos que devuelve la API.
- * Buscamos por coincidencia flexible: el campo `estante` de la API
- * debe contener el número (ej. "Estante 1", "1", "Estantería 1", etc.)
- * y el campo `posicion` debe contener el nivel (ej. "A", "Nivel A", etc.)
- */
+/* Mapro de estanterías */
 const ESTANTES_ORDEN = [4, 3, 2, 1] as const; // izquierda → derecha
 
 @Component({
@@ -60,7 +55,7 @@ export class EstanteSelectorComponent implements OnChanges {
   @Input() ejemplares: Ejemplar[] = [];
 
   /** ID de la ubicación seleccionada actualmente (two-way binding) */
-  @Input() selectedId: number | null = null;
+  @Input() selectedId: number | null | undefined = null;
 
   /** ID del ejemplar que se está editando (para excluirlo de "ocupado"). Acepta undefined para compatibilidad con el modelo. */
   @Input() ejemplarEditandoId: number | null | undefined = null;

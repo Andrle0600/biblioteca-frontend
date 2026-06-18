@@ -30,6 +30,7 @@ export class Prestamo implements OnInit {
   minDate: string;
   maxDate: string;
   errorMessage: string | null = null;
+  errorFecha: string | null = null;
   private userSubscription!: Subscription;
   isLoading = false;
   reservaSuccess = false;
@@ -118,7 +119,14 @@ export class Prestamo implements OnInit {
       return false;
     }
 
-    const fechaSeleccionada = new Date(this.fechaRecojo);
+    const fechaSeleccionada = new Date(this.fechaRecojo + 'T00:00:00');
+
+    // Verificar domingo
+    if (fechaSeleccionada.getDay() === 0) {
+      alert('La biblioteca no abre los domingos. Por favor seleccione otro día.');
+      return false;
+    }
+
     const fechaMin = new Date(this.minDate);
     const fechaMax = new Date(this.maxDate);
 
@@ -145,5 +153,24 @@ export class Prestamo implements OnInit {
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  validarFechaDomingo(): void {
+    if (!this.fechaRecojo) return;
+    // Se agrega 'T00:00:00' para evitar desfase de zona horaria
+    const fecha = new Date(this.fechaRecojo + 'T00:00:00');
+    if (fecha.getDay() === 0) {
+      this.errorFecha = 'La biblioteca no abre los domingos. Por favor seleccione otro día.';
+      this.fechaRecojo = '';
+    } else {
+      this.errorFecha = null;
+    }
+  }
+
+  get fechaDevolucion(): string {
+    if (!this.fechaRecojo) return '';
+    const fecha = new Date(this.fechaRecojo + 'T00:00:00');
+    fecha.setDate(fecha.getDate() + 14);
+    return this.formatDate(fecha);
   }
 }

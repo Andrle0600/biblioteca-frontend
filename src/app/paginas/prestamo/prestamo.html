@@ -45,18 +45,19 @@
       <p class="d-flex align-items-center">
         <span>Día de Entrega:</span>
         <input type="date" class="form-control form-control-sm ms-2" [(ngModel)]="fechaRecojo" [min]="minDate"
-          [max]="maxDate" name="fechaRecojo" required [disabled]="reservaSuccess">
+          [max]="maxDate" name="fechaRecojo" required [disabled]="reservaSuccess" (change)="validarFechaDomingo()">
       </p>
-      <small class="text-muted">Seleccione su fecha de entrega entre mañana y el {{ maxDate | date:"d 'de' MMMM"
-        }}</small>
+      <small class="text-muted">Seleccione su fecha de entrega entre mañana y el {{ maxDate | date:"d 'de' MMMM"}}</small>
+      <div *ngIf="errorFecha" class="alert alert-danger mt-3 no-imprimir">
+        <i class="bi bi-exclamation-triangle-fill"></i> {{ errorFecha }}
+      </div>
 
-      <div class="alert alert-primary d-flex align-items-center" role="alert">
-        <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Info:">
-          <use xlink:href="#info-fill" />
-        </svg>
-        <div>
-          Recuerde devolver el libro antes del: . Evite posibles<a href="#" class="alert-link">sanciones</a>.
-        </div>
+      <div class="alert alert-primary d-flex align-items-start gap-2" *ngIf="fechaDevolucion">
+        <i class="bi bi-calendar-check-fill fs-5 mt-1 text-primary"></i>
+          <div class="alert-body">
+            <p class="mb-1">Recuerde devolver el libro antes del: <strong>{{ fechaDevolucion | date:"d 'de' MMMM" }}</strong>.</p>
+            <p class="mb-0 small">Evite posibles <a href="#" class="alert-link">sanciones</a> por devolución tardía.</p>
+          </div>
       </div>
     </div>
 

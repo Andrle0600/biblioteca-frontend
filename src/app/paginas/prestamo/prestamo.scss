@@ -35,6 +35,11 @@
     border-radius: 0.25rem;
 }
 
+.alert-body p {
+    display: block;
+    justify-content: unset;
+}
+
 @media print {
   .voucher-container,
   .voucher-container * {
