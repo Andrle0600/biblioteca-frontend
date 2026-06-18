@@ -20,7 +20,7 @@
                         <td class="text-center">{{ ejemplar.codigoEjemplar }}</td>
                         <td class="text-center">{{ ejemplar.libro?.titulo }}</td>
                         <td class="text-center">{{ ejemplar.estado }}</td>
-                        <td class="text-center">{{ ejemplar.ubicacion }}</td>
+                        <td class="text-center">{{ ubicacionLabel(ejemplar.ubicacion) }}</td>
                         <td class="d-flex justify-content-evenly">
                             <button class="btn btn-warning btn-sm" (click)="abrirModalEditar(modalEditar, ejemplar)">
                                 <i class="bi bi-pencil-square"></i> Editar
@@ -31,7 +31,7 @@
                         </td>
                     </tr>
                     <tr *ngIf="ejemplares.length === 0">
-                        <td colspan="5" class="text-center">No hay ejemplares registrados</td>
+                        <td colspan="6" class="text-center">No hay ejemplares registrados</td>
                     </tr>
                 </tbody>
             </table>
@@ -59,6 +59,7 @@
                     <label for="libroSelect" class="form-label">Libro</label>
                     <select class="form-select" id="libroSelect" [(ngModel)]="nuevoEjemplar.libroId" name="libroId"
                         required (change)="generarCodigo()">
+                        <option [ngValue]="null" disabled>Seleccione un libro</option>
                         <option *ngFor="let libro of libros" [value]="libro.id">
                             {{libro.titulo}} - {{libro.editorial}}
                         </option>
@@ -72,9 +73,14 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label for="ubicacion" class="form-label">Ubicación</label>
-                    <input type="text" class="form-control" id="ubicacion" [(ngModel)]="nuevoEjemplar.ubicacion"
-                        name="ubicacion" required>
+                    <label for="ubicacionSelect" class="form-label">Ubicación</label>
+                    <select class="form-select" id="ubicacionSelect" [(ngModel)]="nuevoEjemplar.ubicacionId"
+                        name="ubicacionId" required>
+                        <option [ngValue]="null" disabled>Seleccione una ubicación</option>
+                        <option *ngFor="let ub of ubicaciones" [value]="ub.id">
+                            {{ ub.estante }} - {{ ub.posicion }}
+                        </option>
+                    </select>
                 </div>
             </div>
 
@@ -122,9 +128,14 @@
                 </div>
 
                 <div class="col-12">
-                    <label for="editUbicacion" class="form-label">Ubicación</label>
-                    <input type="text" class="form-control" id="editUbicacion" [(ngModel)]="ejemplarEditando.ubicacion"
-                        name="ubicacion" required>
+                    <label for="editUbicacionSelect" class="form-label">Ubicación</label>
+                    <select class="form-select" id="editUbicacionSelect" [(ngModel)]="ejemplarEditando.ubicacionId"
+                        name="ubicacionId" required>
+                        <option [ngValue]="null" disabled>Seleccione una ubicación</option>
+                        <option *ngFor="let ub of ubicaciones" [value]="ub.id">
+                            {{ ub.estante }} - {{ ub.posicion }}
+                        </option>
+                    </select>
                 </div>
             </div>
 

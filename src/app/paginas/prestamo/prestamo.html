@@ -39,7 +39,7 @@
     <div class="mb-4 info-block">
       <h6 class="bg-light text-dark text-center py-1 border rounded">Datos del préstamo</h6>
       <p>Código del ejemplar: <span>{{ ejemplar?.codigoEjemplar }}</span></p>
-      <p>Ubicación física: <span>Estantería {{ ejemplar?.ubicacion }}</span></p>
+      <p>Ubicación física: <span>{{ ejemplar?.ubicacion ? (ejemplar?.ubicacion?.estante + ' - ' + ejemplar?.ubicacion?.posicion) : 'Sin ubicación' }}</span></p>
 
       <p class="d-flex align-items-center">
         <span>Día de Recojo:</span>

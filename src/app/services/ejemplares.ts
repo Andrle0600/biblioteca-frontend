@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Ejemplar, EstadoEjemplar } from '../dashboard/ejemplares/ejemplar.model';
+import { Ejemplar, EstadoEjemplar, Ubicacion } from '../dashboard/ejemplares/ejemplar.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EjemplaresService {
   private apiUrl = 'http://localhost:8080/api/ejemplares';
+  private ubicacionesUrl = 'http://localhost:8080/api/ubicaciones';
 
   constructor(private http: HttpClient) { }
 
@@ -19,18 +20,31 @@ export class EjemplaresService {
     return this.http.get<Ejemplar>(`${this.apiUrl}/${id}`);
   }
 
+  getUbicaciones(): Observable<Ubicacion[]> {
+    return this.http.get<Ubicacion[]>(this.ubicacionesUrl);
+  }
+
   crearEjemplar(ejemplar: Ejemplar): Observable<Ejemplar> {
-    // Construye el objeto que espera el backend
     const payload = {
-      ...ejemplar,
-      libro: ejemplar.libroId ? { id: ejemplar.libroId } : null
+      codigoEjemplar: ejemplar.codigoEjemplar,
+      estado: ejemplar.estado,
+      libro: ejemplar.libroId ? { id: ejemplar.libroId } : null,
+      ubicacion: ejemplar.ubicacionId ? { id: ejemplar.ubicacionId } : null
     };
 
     return this.http.post<Ejemplar>(this.apiUrl, payload);
   }
 
   actualizarEjemplar(ejemplar: Ejemplar): Observable<Ejemplar> {
-    return this.http.put<Ejemplar>(`${this.apiUrl}/${ejemplar.id}`, ejemplar);
+    const payload = {
+      id: ejemplar.id,
+      codigoEjemplar: ejemplar.codigoEjemplar,
+      estado: ejemplar.estado,
+      libro: ejemplar.libro ? { id: ejemplar.libro.id } : (ejemplar.libroId ? { id: ejemplar.libroId } : null),
+      ubicacion: ejemplar.ubicacionId ? { id: ejemplar.ubicacionId } : null
+    };
+
+    return this.http.put<Ejemplar>(`${this.apiUrl}/${ejemplar.id}`, payload);
   }
 
   eliminarEjemplar(id: number): Observable<void> {

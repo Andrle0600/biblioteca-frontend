@@ -1,11 +1,18 @@
 import { Libro } from "../libros/libro.model";
 
+export interface Ubicacion {
+    id: number;
+    estante: string;
+    posicion: string;
+}
+
 export interface Ejemplar {
     id?: number;
     codigoEjemplar: string;
     estado: EstadoEjemplar;
-    ubicacion: string;
-    libroId?: number|null;
+    ubicacion?: Ubicacion | null;
+    ubicacionId?: number | null;
+    libroId?: number | null;
     libro?: Libro;
 }
 

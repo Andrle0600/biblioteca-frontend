@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EjemplaresService } from '../../services/ejemplares';
 import { LibrosService } from '../../services/libros';
-import { Ejemplar, EstadoEjemplar } from './ejemplar.model';
+import { Ejemplar, EstadoEjemplar, Ubicacion } from './ejemplar.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -16,13 +16,14 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class Ejemplares implements OnInit {
   ejemplares: Ejemplar[] = [];
   libros: any[] = [];
+  ubicaciones: Ubicacion[] = [];
   estados = Object.values(EstadoEjemplar);
 
   // Para el formulario de creación
   nuevoEjemplar: Ejemplar = {
     codigoEjemplar: '',
     estado: EstadoEjemplar.DISPONIBLE,
-    ubicacion: '',
+    ubicacionId: null,
     libroId: null
   };
 
@@ -62,20 +63,30 @@ export class Ejemplares implements OnInit {
       },
       error: (err) => console.error('Error al cargar libros', err)
     });
+
+    this.ejemplaresService.getUbicaciones().subscribe({
+      next: (data) => {
+        this.ubicaciones = data;
+      },
+      error: (err) => console.error('Error al cargar ubicaciones', err)
+    });
   }
 
   abrirModalCrear(modal: any): void {
     this.nuevoEjemplar = {
       codigoEjemplar: '',
       estado: EstadoEjemplar.DISPONIBLE,
-      ubicacion: '',
+      ubicacionId: null,
       libroId: null
     };
     this.modalService.open(modal);
   }
 
   abrirModalEditar(modal: any, ejemplar: Ejemplar): void {
-    this.ejemplarEditando = { ...ejemplar };
+    this.ejemplarEditando = {
+      ...ejemplar,
+      ubicacionId: ejemplar.ubicacion?.id ?? null
+    };
     this.modalService.open(modal);
   }
 
@@ -86,7 +97,6 @@ export class Ejemplares implements OnInit {
         this.cargarDatos();
         this.modalService.dismissAll();
         this.guardando = false;
-        console.log('Datos a enviar:', this.nuevoEjemplar);
       },
       error: (err) => {
         console.error('Error al crear ejemplar', err);
@@ -138,13 +148,16 @@ export class Ejemplares implements OnInit {
       return idComparar === libro.id;
     });
 
-    console.log('Ejemplares del libro', libro.titulo, ':', ejemplaresDelLibro);
-
     const numeroCorrelativo = (ejemplaresDelLibro.length + 1).toString().padStart(3, '0');
     const isbn = libro.isbn?.replace(/[^0-9]/g, '') || '00000';
     const isbnSegmento = isbn.slice(-5);
 
     this.nuevoEjemplar.codigoEjemplar = `${abreviaturaTitulo}-${isbnSegmento}-${numeroCorrelativo}`;
+  }
+
+  ubicacionLabel(ubicacion: Ubicacion | null | undefined): string {
+    if (!ubicacion) return 'Sin ubicación';
+    return `${ubicacion.estante} - ${ubicacion.posicion}`;
   }
 
   normalizar(texto: string): string {
@@ -164,6 +177,4 @@ export class Ejemplares implements OnInit {
 
     return abreviatura;
   }
-
-
 }
