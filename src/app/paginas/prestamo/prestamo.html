@@ -39,14 +39,25 @@
     <div class="mb-4 info-block">
       <h6 class="bg-light text-dark text-center py-1 border rounded">Datos del préstamo</h6>
       <p>Código del ejemplar: <span>{{ ejemplar?.codigoEjemplar }}</span></p>
-      <p>Ubicación física: <span>{{ ejemplar?.ubicacion ? (ejemplar?.ubicacion?.estante + ' - ' + ejemplar?.ubicacion?.posicion) : 'Sin ubicación' }}</span></p>
+      <p>Ubicación física: <span>{{ ejemplar?.ubicacion ? (ejemplar?.ubicacion?.estante + ' - ' +
+          ejemplar?.ubicacion?.posicion) : 'Sin ubicación' }}</span></p>
 
       <p class="d-flex align-items-center">
-        <span>Día de Recojo:</span>
+        <span>Día de Entrega:</span>
         <input type="date" class="form-control form-control-sm ms-2" [(ngModel)]="fechaRecojo" [min]="minDate"
           [max]="maxDate" name="fechaRecojo" required [disabled]="reservaSuccess">
       </p>
-      <small class="text-muted">Seleccione una fecha entre mañana y el {{ maxDate | date:"d 'de' MMMM" }}</small>
+      <small class="text-muted">Seleccione su fecha de entrega entre mañana y el {{ maxDate | date:"d 'de' MMMM"
+        }}</small>
+
+      <div class="alert alert-primary d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Info:">
+          <use xlink:href="#info-fill" />
+        </svg>
+        <div>
+          Recuerde devolver el libro antes del: . Evite posibles<a href="#" class="alert-link">sanciones</a>.
+        </div>
+      </div>
     </div>
 
     <!-- Botones de acción -->

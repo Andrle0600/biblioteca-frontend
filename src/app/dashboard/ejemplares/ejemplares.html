@@ -54,7 +54,9 @@
     </div>
     <div class="modal-body">
         <form (ngSubmit)="crearEjemplar()" #formCrear="ngForm">
-            <div class="row g-3">
+
+            <!-- Fila 1: Libro -->
+            <div class="row g-3 mb-3">
                 <div class="col-12">
                     <label for="libroSelect" class="form-label">Libro</label>
                     <select class="form-select" id="libroSelect" [(ngModel)]="nuevoEjemplar.libroId" name="libroId"
@@ -65,22 +67,29 @@
                         </option>
                     </select>
                 </div>
+            </div>
 
-                <div class="col-md-6">
+            <!-- Fila 2: Código generado -->
+            <div class="row g-3 mb-3">
+                <div class="col-12">
                     <label for="codigoEjemplar" class="form-label">Código del Ejemplar</label>
                     <input type="text" class="form-control" id="codigoEjemplar"
                         [(ngModel)]="nuevoEjemplar.codigoEjemplar" name="codigoEjemplar" readonly>
                 </div>
+            </div>
 
-                <div class="col-md-6">
-                    <label for="ubicacionSelect" class="form-label">Ubicación</label>
-                    <select class="form-select" id="ubicacionSelect" [(ngModel)]="nuevoEjemplar.ubicacionId"
-                        name="ubicacionId" required>
-                        <option [ngValue]="null" disabled>Seleccione una ubicación</option>
-                        <option *ngFor="let ub of ubicaciones" [value]="ub.id">
-                            {{ ub.estante }} - {{ ub.posicion }}
-                        </option>
-                    </select>
+            <!-- Fila 3: Selector visual de ubicación -->
+            <div class="row g-3 mb-2">
+                <div class="col-12">
+                    <label class="form-label">Ubicación en estantería</label>
+                    <!-- Campo oculto para validación de requerido -->
+                    <input type="hidden" [(ngModel)]="nuevoEjemplar.ubicacionId" name="ubicacionId" required>
+                    <app-estante-selector
+                        [ubicaciones]="ubicaciones"
+                        [ejemplares]="ejemplares"
+                        [selectedId]="nuevoEjemplar.ubicacionId"
+                        (selectedIdChange)="nuevoEjemplar.ubicacionId = $event">
+                    </app-estante-selector>
                 </div>
             </div>
 
@@ -105,12 +114,16 @@
         <form (ngSubmit)="actualizarEjemplar()" #formEditar="ngForm" *ngIf="ejemplarEditando">
             <input type="hidden" [(ngModel)]="ejemplarEditando.id" name="id">
 
-            <div class="row g-3">
+            <!-- Fila 1: Libro (sólo lectura en edición) -->
+            <div class="row g-3 mb-3">
                 <div class="col-12">
                     <label class="form-label">Libro</label>
                     <input type="text" class="form-control" [value]="ejemplarEditando.libro?.titulo" readonly>
                 </div>
+            </div>
 
+            <!-- Fila 2: Código y Estado -->
+            <div class="row g-3 mb-3">
                 <div class="col-md-6">
                     <label for="editCodigo" class="form-label">Código del Ejemplar</label>
                     <input type="text" class="form-control" id="editCodigo"
@@ -126,16 +139,21 @@
                         </option>
                     </select>
                 </div>
+            </div>
 
+            <!-- Fila 3: Selector visual de ubicación -->
+            <div class="row g-3 mb-2">
                 <div class="col-12">
-                    <label for="editUbicacionSelect" class="form-label">Ubicación</label>
-                    <select class="form-select" id="editUbicacionSelect" [(ngModel)]="ejemplarEditando.ubicacionId"
-                        name="ubicacionId" required>
-                        <option [ngValue]="null" disabled>Seleccione una ubicación</option>
-                        <option *ngFor="let ub of ubicaciones" [value]="ub.id">
-                            {{ ub.estante }} - {{ ub.posicion }}
-                        </option>
-                    </select>
+                    <label class="form-label">Ubicación en estantería</label>
+                    <!-- Campo oculto para validación de requerido -->
+                    <input type="hidden" [(ngModel)]="ejemplarEditando.ubicacionId" name="ubicacionId" required>
+                    <app-estante-selector
+                        [ubicaciones]="ubicaciones"
+                        [ejemplares]="ejemplares"
+                        [selectedId]="ejemplarEditando.ubicacionId"
+                        [ejemplarEditandoId]="ejemplarEditando.id"
+                        (selectedIdChange)="ejemplarEditando.ubicacionId = $event">
+                    </app-estante-selector>
                 </div>
             </div>
 

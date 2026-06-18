@@ -5,11 +5,12 @@ import { Ejemplar, EstadoEjemplar, Ubicacion } from './ejemplar.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { EstanteSelectorComponent } from './estante-selector/estante-selector.component';
 
 @Component({
   selector: 'app-ejemplares',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, EstanteSelectorComponent],
   templateUrl: './ejemplares.html',
   styleUrl: './ejemplares.scss'
 })

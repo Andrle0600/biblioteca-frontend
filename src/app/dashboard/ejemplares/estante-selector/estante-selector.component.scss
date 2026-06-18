@@ -1,0 +1,367 @@
+// ═══════════════════════════════════════════════════════════════════════════
+// TOKENS DE COLOR — coherentes con el tema Bootstrap del proyecto
+// ═══════════════════════════════════════════════════════════════════════════
+
+$color-disponible-bg:     #eaf6ef;
+$color-disponible-border: #28a745;
+$color-disponible-text:   #1a6e30;
+$color-disponible-hover:  #c8ecd3;
+
+$color-ocupado-bg:        #fde8e8;
+$color-ocupado-border:    #dc3545;
+$color-ocupado-text:      #8b1a1a;
+$color-ocupado-stripe:    rgba(220, 53, 69, 0.08);
+
+$color-selec-bg:          #dbeafe;
+$color-selec-border:      #0d6efd;
+$color-selec-text:        #0a3d91;
+$color-selec-glow:        rgba(13, 110, 253, 0.35);
+
+$color-inactivo-bg:       #f5f5f5;
+$color-inactivo-border:   #c0c0c0;
+$color-inactivo-text:     #999999;
+
+$color-aisle:             #f0f4f8;
+$color-aisle-border:      #c9d4de;
+$color-wrapper-bg:        #fdfdff;
+$color-wrapper-border:    #dde3ed;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CONTENEDOR PRINCIPAL
+// ═══════════════════════════════════════════════════════════════════════════
+
+.shelf-map-wrapper {
+  background: $color-wrapper-bg;
+  border: 1px solid $color-wrapper-border;
+  border-radius: 12px;
+  padding: 1rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  font-family: inherit;
+}
+
+// ─── Encabezado ─────────────────────────────────────────────────────────────
+
+.shelf-map-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #344563;
+  letter-spacing: 0.02em;
+
+  i {
+    font-size: 1rem;
+    color: #0d6efd;
+  }
+}
+
+// ─── Badge de selección ──────────────────────────────────────────────────────
+
+.shelf-selection-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  background: #f0f4f8;
+  color: #64748b;
+  border: 1px dashed #aab4c0;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+
+  &.active {
+    background: $color-selec-bg;
+    border: 1px solid $color-selec-border;
+    color: $color-selec-text;
+    font-weight: 600;
+
+    i {
+      color: $color-selec-border;
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// PLANO DE PLANTA
+// ═══════════════════════════════════════════════════════════════════════════
+
+.shelf-floor-plan {
+  background: #f8fafc;
+  border: 1.5px solid $color-wrapper-border;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.floor-plan-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  align-self: flex-start;
+}
+
+.floor-plan-entry {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+
+  i { font-size: 0.8rem; }
+}
+
+// ─── Contenedor de columnas ──────────────────────────────────────────────────
+
+.shelves-container {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 0;
+  width: 100%;
+  justify-content: center;
+}
+
+// ─── Pasillos ────────────────────────────────────────────────────────────────
+
+.aisle {
+  width: 2.25rem;
+  min-width: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $color-aisle;
+  border-left: 1px dashed $color-aisle-border;
+  border-right: 1px dashed $color-aisle-border;
+  margin: 0 0.2rem;
+  border-radius: 4px;
+}
+
+.aisle-label {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  font-size: 0.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #94a3b8;
+  user-select: none;
+}
+
+// ─── Columna de estante ──────────────────────────────────────────────────────
+
+.shelf-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 0.4rem 0.3rem;
+  background: #ffffff;
+  border: 1.5px solid #d1d9e6;
+  border-radius: 8px;
+  min-width: 72px;
+
+  // Las centrales (Est 3 y 2) están juntas sin gap entre ellas
+  &.shelf-central {
+    border-radius: 0;
+    border-right-width: 0.75px;
+    border-left-width: 0.75px;
+
+    &:first-of-type {
+      border-radius: 8px 0 0 8px;
+    }
+    &:last-of-type {
+      border-radius: 0 8px 8px 0;
+    }
+  }
+}
+
+.shelf-number-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #334155;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: #e8ecf5;
+  border-radius: 4px;
+  padding: 1px 6px;
+  margin-bottom: 2px;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CELDAS
+// ═══════════════════════════════════════════════════════════════════════════
+
+.shelf-cell {
+  width: 60px;
+  height: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  border-radius: 6px;
+  border: 1.5px solid transparent;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.15s ease;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+
+// Código de la celda
+.cell-code {
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+// Ícono de estado
+.cell-icon {
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+// Texto "inactivo"
+.cell-inactive-label {
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: lowercase;
+}
+
+// Capacidad de la celda
+.cell-capacity {
+  font-size: 0.6rem;
+  font-weight: 600;
+  opacity: 0.85;
+  line-height: 1;
+  margin-top: 1.5px;
+}
+
+// ─── Estado: DISPONIBLE ──────────────────────────────────────────────────────
+
+.cell-disponible {
+  background: $color-disponible-bg;
+  border-color: $color-disponible-border;
+  color: $color-disponible-text;
+}
+
+.cell-clickable {
+  cursor: pointer;
+
+  &:hover {
+    background: $color-disponible-hover;
+    border-color: darken($color-disponible-border, 10%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.25);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+}
+
+// ─── Estado: OCUPADO ─────────────────────────────────────────────────────────
+
+.cell-ocupado {
+  background: $color-ocupado-bg;
+  border-color: $color-ocupado-border;
+  color: $color-ocupado-text;
+  cursor: not-allowed;
+
+  // Patrón diagonal de advertencia
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 4px,
+      $color-ocupado-stripe 4px,
+      $color-ocupado-stripe 8px
+    );
+    pointer-events: none;
+  }
+}
+
+// ─── Estado: SELECCIONADO ────────────────────────────────────────────────────
+
+.cell-seleccionado {
+  background: $color-selec-bg;
+  border-color: $color-selec-border;
+  color: $color-selec-text;
+  box-shadow: 0 0 0 3px $color-selec-glow;
+  cursor: pointer;
+  animation: pulse-selected 2s ease-in-out infinite;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 4px $color-selec-glow, 0 4px 12px rgba(13, 110, 253, 0.2);
+  }
+}
+
+@keyframes pulse-selected {
+  0%, 100% { box-shadow: 0 0 0 3px $color-selec-glow; }
+  50%       { box-shadow: 0 0 0 6px rgba(13, 110, 253, 0.15); }
+}
+
+// ─── Estado: INACTIVO ────────────────────────────────────────────────────────
+
+.cell-inactivo {
+  background: $color-inactivo-bg;
+  border-color: $color-inactivo-border;
+  border-style: dashed;
+  color: $color-inactivo-text;
+  cursor: default;
+  opacity: 0.7;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// LEYENDA
+// ═══════════════════════════════════════════════════════════════════════════
+
+.shelf-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.25rem;
+  justify-content: center;
+  padding-top: 0.25rem;
+  border-top: 1px solid #eaeef4;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  color: #475569;
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  border: 1.5px solid transparent;
+  flex-shrink: 0;
+
+  &.dot-disponible  { background: $color-disponible-bg;  border-color: $color-disponible-border; }
+  &.dot-ocupado     { background: $color-ocupado-bg;     border-color: $color-ocupado-border; }
+  &.dot-seleccionado{ background: $color-selec-bg;       border-color: $color-selec-border; }
+  &.dot-inactivo    { background: $color-inactivo-bg;    border-color: $color-inactivo-border; border-style: dashed; }
+}

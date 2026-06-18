@@ -1,0 +1,113 @@
+<div class="shelf-map-wrapper">
+
+  <!-- ─── Encabezado ─────────────────────────────────────────────────────── -->
+  <div class="shelf-map-header">
+    <i class="bi bi-map"></i>
+    <span>Mapa de Estanterías — Selecciona la ubicación del ejemplar</span>
+  </div>
+
+  <!-- ─── Badge de selección activa ─────────────────────────────────────── -->
+  <div class="shelf-selection-badge" [class.active]="selectedId != null">
+    <ng-container *ngIf="selectedId != null; else sinSeleccion">
+      <i class="bi bi-check-circle-fill"></i>
+      <strong>Seleccionado:</strong>&nbsp;{{ labelSeleccionado }}
+    </ng-container>
+    <ng-template #sinSeleccion>
+      <i class="bi bi-hand-index"></i>&nbsp;Haz clic sobre una celda disponible para seleccionar la ubicación
+    </ng-template>
+  </div>
+
+  <!-- ─── Plano de planta ────────────────────────────────────────────────── -->
+  <div class="shelf-floor-plan">
+
+    <!-- Etiqueta de la zona -->
+    <div class="floor-plan-label">Vista de planta — Sala de Estanterías</div>
+
+    <!-- Contenedor de columnas + pasillos -->
+    <div class="shelves-container">
+
+      <ng-container *ngFor="let columna of columnas; let i = index">
+
+        <!-- Pasillo antes de las columnas 1 y 3 (índices 1 y 3) -->
+        <div class="aisle" *ngIf="mostrarPasillo(i)">
+          <span class="aisle-label">Pasillo</span>
+        </div>
+
+        <!-- Columna de estantería -->
+        <div class="shelf-column"
+             [class.shelf-central]="esCentral(columna[0].estanteNum)">
+
+          <!-- Número de estantería -->
+          <div class="shelf-number-tag">
+            Est. {{ columna[0].estanteNum }}
+          </div>
+
+          <!-- Celdas (de nivel E arriba a A abajo) -->
+          <div
+            *ngFor="let celda of columna"
+            class="shelf-cell"
+            [class.cell-disponible]="celda.estado === 'disponible'"
+            [class.cell-ocupado]="celda.estado === 'ocupado'"
+            [class.cell-seleccionado]="celda.estado === 'seleccionado'"
+            [class.cell-inactivo]="celda.estado === 'inactivo'"
+            [class.cell-clickable]="celda.estado === 'disponible' || celda.estado === 'seleccionado'"
+            [title]="tooltipCelda(celda)"
+            (click)="seleccionar(celda)"
+          >
+            <!-- Ícono de estado -->
+            <span class="cell-icon">
+              <i class="bi"
+                 [class.bi-book-half]="celda.estado === 'disponible' && celda.ejemplaresOcupantes.length > 0"
+                 [class.bi-book-fill]="celda.estado === 'ocupado'"
+                 [class.bi-check2]="celda.estado === 'seleccionado'"
+                 [class.bi-dash]="celda.estado === 'inactivo'"
+              ></i>
+            </span>
+
+            <!-- Código de la celda -->
+            <span class="cell-code">{{ celda.codigo }}</span>
+
+            <!-- Capacidad ocupada (ej: 3/5) -->
+            <span class="cell-capacity" *ngIf="celda.estado !== 'inactivo'">
+              {{ celda.ejemplaresOcupantes.length }}/5
+            </span>
+
+            <!-- Texto "inactivo" cuando no hay ubicación en BD -->
+            <span class="cell-inactive-label" *ngIf="celda.estado === 'inactivo'">
+              inactivo
+            </span>
+          </div>
+
+        </div>
+      </ng-container>
+
+    </div><!-- /shelves-container -->
+
+    <!-- Indicador de norte/entrada (decorativo) -->
+    <div class="floor-plan-entry">
+      <i class="bi bi-arrow-up-circle"></i> Entrada
+    </div>
+
+  </div><!-- /shelf-floor-plan -->
+
+  <!-- ─── Leyenda ────────────────────────────────────────────────────────── -->
+  <div class="shelf-legend">
+    <div class="legend-item">
+      <span class="legend-dot dot-disponible"></span>
+      Disponible
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot dot-ocupado"></span>
+      Ocupado
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot dot-seleccionado"></span>
+      Seleccionado
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot dot-inactivo"></span>
+      Inactivo
+    </div>
+  </div>
+
+</div>
