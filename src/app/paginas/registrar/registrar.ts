@@ -16,6 +16,11 @@ import { ToastService } from '../../services/toast.service';
 export class Registrar {
   registroForm: FormGroup;
   error: string | null = null;
+   maxFecha = (() => {
+    const d = new Date();
+    d.setFullYear(d.getFullYear() - 18);
+    return d.toISOString().split('T')[0]; // ej: "2008-06-18"
+  })();
 
   constructor(
     private fb: FormBuilder,
@@ -27,7 +32,7 @@ export class Registrar {
       dni: ['', Validators.required],
       nombres: ['', Validators.required],
       apellidos: ['', Validators.required],
-      fechaNacimiento: ['', Validators.required],
+      fechaNacimiento: ['', [Validators.required, this.mayorDeEdadValidator]],
       genero: ['', Validators.required],
       username: ['', [Validators.required, Validators.email]],
       telefono: ['', Validators.required],
@@ -59,5 +64,16 @@ export class Registrar {
           }
         }
       });
+  }
+
+  private mayorDeEdadValidator(control: any) {
+    if (!control.value) return null;
+    const hoy = new Date();
+    const nacimiento = new Date(control.value);
+    const edad = hoy.getFullYear() - nacimiento.getFullYear();
+    const cumplioEsteAnio =
+      hoy.getMonth() > nacimiento.getMonth() ||
+      (hoy.getMonth() === nacimiento.getMonth() && hoy.getDate() >= nacimiento.getDate());
+    return edad > 18 || (edad === 18 && cumplioEsteAnio) ? null : { menorDeEdad: true };
   }
 }

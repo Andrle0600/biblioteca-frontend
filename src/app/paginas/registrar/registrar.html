@@ -52,10 +52,14 @@
     <div class="row g-3 mt-3">
       <div class="col-md-6">
         <label for="fechaNacimiento" class="form-label">Fecha de nacimiento *</label>
-        <input type="date" id="fechaNacimiento" class="form-control" formControlName="fechaNacimiento" required />
+        <input type="date" id="fechaNacimiento" class="form-control" formControlName="fechaNacimiento" [max]="maxFecha"
+          required />
         <div *ngIf="registroForm.get('fechaNacimiento')?.invalid && registroForm.get('fechaNacimiento')?.touched"
           class="text-danger">
-          La fecha de nacimiento es requerida
+          <div *ngIf="registroForm.get('fechaNacimiento')?.errors?.['required']">La fecha de nacimiento es requerida
+          </div>
+          <div *ngIf="registroForm.get('fechaNacimiento')?.errors?.['menorDeEdad']">Debes ser mayor de 18 años para
+            registrarte</div>
         </div>
       </div>
       <div class="col-md-6">
