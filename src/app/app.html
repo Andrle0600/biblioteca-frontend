@@ -16,9 +16,9 @@
     >
       <div class="toast-header app-toast__header">
         <span class="app-toast__icon me-2">
-          @if (toast.type === 'success') { ✅ }
-          @if (toast.type === 'error')   { ❌ }
-          @if (toast.type === 'info')    { ℹ️ }
+          @if (toast.type === 'success') { <i class="bi bi-check-circle-fill"></i> }
+          @if (toast.type === 'error')   { <i class="bi bi-x-circle-fill"></i> }
+          @if (toast.type === 'info')    { <i class="bi bi-info-circle-fill"></i> }
         </span>
         <strong class="me-auto app-toast__title">
           @if (toast.type === 'success') { ¡Operación exitosa! }

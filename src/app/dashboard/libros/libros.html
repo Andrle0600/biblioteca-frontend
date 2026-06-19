@@ -35,8 +35,14 @@
                         <td class="text-center">{{ libro.editorial }}</td>
                         <td class="text-center">{{ libro.genero }}</td>
                         <td class="text-center">{{ libro.fechaPublicacion | date:"dd/MM/yyyy" }}</td>
-                        <td class="text-center">  </td>
-                        <td class="d-flex justify-content-evenly">
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill border px-3 py-1.5 shadow-sm"
+                                [ngClass]="libro.ejemplares?.length ? 'bg-success-subtle text-success border-success-subtle' : 'bg-danger-subtle text-danger border-danger-subtle'"
+                                style="font-size: 0.85rem; font-weight: 600;">
+                                {{ libro.ejemplares?.length || 0 }}
+                            </span>
+                        </td>
+                        <td class="d-flex justify-content-evenly align-middle">
                             <button class="btn btn-warning btn-sm" (click)="abrirModalEditar(libro.id)"><i
                                     class="bi bi-pencil-square"></i> Editar</button>
                             <button class="btn btn-danger btn-sm"

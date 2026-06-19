@@ -1,3 +1,5 @@
+import { Ejemplar } from '../ejemplares/ejemplar.model';
+
 export interface Libro {
     id?: number;
     titulo: string;
@@ -9,4 +11,5 @@ export interface Libro {
     descripcion: string;
     imagenUrl: string;
     slug?: string;
+    ejemplares?: Ejemplar[];
 }
