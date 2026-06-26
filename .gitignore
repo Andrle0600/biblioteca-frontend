@@ -2,7 +2,10 @@
 
 #extras
 api-cambios.txt
-/WCAG/
+api-ejemplar.txt
+componente-estantes.txt
+reporte_colores_accesibilidad.md
+/WCAG-Referencias/
 
 # Compiled output
 /dist
