@@ -1,3 +1,9 @@
+/* El host del componente Angular debe ser block para que sticky funcione
+   (los custom elements son inline por defecto) */
+:host {
+    display: block;
+}
+
 body {
     height: 100vh;
     background-color: #EEF0F2;
@@ -17,6 +23,14 @@ body::before {
     z-index: -1;
 }
 
+/* HEADER STICKY – se aplica al <header> (no al <nav>) porque sticky
+   no puede escapar los límites de su padre. El padre de <header> es
+   el host del componente (toda la página), así sí tiene espacio. */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+}
 
 /* NAVBAR PRINCIPAL */
 .custom-navbar {
