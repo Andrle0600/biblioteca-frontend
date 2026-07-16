@@ -17,6 +17,7 @@ import { Reservas } from './dashboard/reservas/reservas';
 import { Historial } from './dashboard/historial/historial';
 import { Atrasadas } from './dashboard/atrasadas/atrasadas';
 import { AdminGuard } from './guards/admin-guard';
+import { Expositores } from './dashboard/expositores/expositores';
 export const routes: Routes = [
     {
         path: '',
@@ -94,6 +95,9 @@ export const routes: Routes = [
             {
                 path: 'usuarios',
                 component: Usuarios
+            }, {
+                path: 'expositores',
+                component: Expositores
             }, {
                 path: 'reservas',
                 component: Reservas

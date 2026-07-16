@@ -1,0 +1,316 @@
+================================================================
+  ENTIDADES Y ENUMS - FLUJO DE RESERVA DE ACTIVIDAD
+================================================================
+
+
+----------------------------------------------------------------
+ENTIDAD: ReservaActividad
+----------------------------------------------------------------
+
+@Entity
+@Table(name = "reserva_actividad")
+public class ReservaActividad {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime fechaReserva;
+
+    @Enumerated(EnumType.STRING)
+    private EstadoReservaActividad estado = EstadoReservaActividad.PENDIENTE;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties({"password", "enabled", "roles", "reservas", "reservasActividades"})
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "actividad_id")
+    @JsonIgnoreProperties({"reservas"})
+    private Actividad actividad;
+
+    public ReservaActividad() {
+    }
+}
+
+
+----------------------------------------------------------------
+ENTIDAD: Actividad
+----------------------------------------------------------------
+
+@Entity
+public class Actividad {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String nombre;
+    private String descripcion;
+
+    @Column(name = "imagen_url")
+    private String imagenUrl;
+
+    @Column(name = "fecha_hora")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime fechaHora;
+
+    @Column(name = "duracion_minutos")
+    private Integer duracionMinutos;
+
+    private Integer capacidad;
+
+    @Enumerated(EnumType.STRING)
+    private EstadoActividad estado;
+
+    @Enumerated(EnumType.STRING)
+    private LugarActividad lugar;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_actividad")
+    private TipoActividad tipoActividad;
+
+    @ManyToOne
+    @JoinColumn(name = "expositor_id", nullable = true)
+    @JsonIgnoreProperties("actividades")
+    private Expositor expositor;
+
+    @OneToMany(mappedBy = "actividad", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"actividad"})
+    private List<ReservaActividad> reservas = new ArrayList<>();
+
+    public Actividad() {
+    }
+}
+
+
+----------------------------------------------------------------
+ENTIDAD: Expositor
+----------------------------------------------------------------
+
+@Entity
+public class Expositor {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String nombres;
+    private String apellidos;
+
+    @Column(name = "foto_url")
+    private String fotoUrl;
+
+    private String bio;
+    private String especialidad;
+
+    @Column(unique = true)
+    private String username;
+
+    private String password;
+    private boolean enabled;
+
+    @OneToMany(mappedBy = "expositor")
+    @JsonIgnoreProperties({"expositor", "reservas"})
+    private List<Actividad> actividades = new ArrayList<>();
+
+    public Expositor() {
+    }
+}
+
+
+----------------------------------------------------------------
+ENTIDAD: User
+----------------------------------------------------------------
+
+@Entity
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Basic
+    private String username;
+    private String password;
+    private boolean enabled;
+    private String dni;
+    private String telefono;
+    private String nombres;
+    private String apellidos;
+    private String direccion;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date fechaNacimiento;
+
+    private String genero;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"user", "ejemplar"})
+    private List<Reserva> reservas = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"user"})
+    private List<ReservaActividad> reservasActividades = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
+
+    public User() {
+    }
+}
+
+
+----------------------------------------------------------------
+ENTIDAD: Role
+----------------------------------------------------------------
+
+@Entity
+public class Role {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+
+    public Role() {
+    }
+}
+
+
+================================================================
+  ENUMS RELACIONADOS AL FLUJO DE RESERVA DE ACTIVIDAD
+================================================================
+
+
+----------------------------------------------------------------
+ENUM: EstadoReservaActividad
+----------------------------------------------------------------
+
+public enum EstadoReservaActividad {
+    PENDIENTE,
+    CONFIRMADO,
+    CANCELADO,
+    ASISTIO,
+    NO_ASISTIO
+}
+
+
+----------------------------------------------------------------
+ENUM: EstadoActividad
+----------------------------------------------------------------
+
+public enum EstadoActividad {
+    ACTIVA,
+    CANCELADA,
+    FINALIZADA
+}
+
+
+----------------------------------------------------------------
+ENUM: LugarActividad
+----------------------------------------------------------------
+
+public enum LugarActividad {
+    SALA_LECTURA_A,
+    SALA_LECTURA_B,
+    AUDITORIO,
+    FRONTIS,
+    EXTERNO
+}
+
+
+----------------------------------------------------------------
+ENUM: TipoActividad
+----------------------------------------------------------------
+
+public enum TipoActividad {
+
+    /**
+     * Reunion para comentar y discutir un libro o autor en conjunto.
+     * Incluye: circulos de lectura, tertulias literarias, presentaciones de
+     * libros con conversacion posterior.
+     * Publico objetivo: lectores habituales que buscan discusion y comunidad
+     * alrededor de un libro.
+     */
+    CLUB_DE_LECTURA,
+
+    /**
+     * Sesion practica donde el asistente aprende haciendo, ya sea de una sola
+     * sesion o con continuidad en varias (cursos cortos).
+     * Incluye: manualidades, escritura creativa, arte, idiomas, yoga, taichi,
+     * alfabetizacion digital, capacitacion en tramites en linea, cocina.
+     * Publico objetivo: quien quiere aprender o practicar una habilidad de
+     * forma activa y participativa.
+     */
+    TALLER,
+
+    /**
+     * Exposicion oral de un tema a cargo de un expositor, con el publico en
+     * rol de oyente.
+     * Incluye: conferencias, ponencias, mesas redondas, coloquios tematicos
+     * (ej. medio ambiente, historia local, salud).
+     * Publico objetivo: quien busca informarse/aprender sobre un tema
+     * escuchando a un experto, sin participacion activa.
+     */
+    CHARLA,
+
+    /**
+     * Muestra visual y estatica que se recorre y observa.
+     * Incluye: exposiciones de arte, fotografia, muestras historicas u
+     * objetos tematicos.
+     * Publico objetivo: quien busca una experiencia visual/contemplativa,
+     * de recorrido libre.
+     */
+    EXPOSICION,
+
+    /**
+     * Proyeccion de peliculas o documentales, con o sin conversatorio
+     * posterior.
+     * Incluye: ciclos de cine, cine foro, documentales tematicos.
+     * Publico objetivo: cineastas y aficionados al cine como actividad
+     * cultural puntual.
+     */
+    CINE,
+
+    /**
+     * Presentacion artistica en vivo dirigida a ser observada por el publico.
+     * Incluye: conciertos, obras de teatro, danza, recitales.
+     * Publico objetivo: quien busca entretenimiento/arte en vivo.
+     */
+    ESPECTACULO,
+
+    /**
+     * Competencia con participantes inscritos que compiten entre si, evaluados
+     * o clasificados de alguna forma.
+     * Incluye: torneos de ajedrez u otros juegos, concursos de oratoria,
+     * poesia, canto, talento, deletreo.
+     * Publico objetivo: participantes que compiten y publico que asiste.
+     */
+    CONCURSO,
+
+    /**
+     * Actividad pensada y anunciada especificamente para ninos (y
+     * frecuentemente sus familias).
+     * Incluye: cuentacuentos, juegos, manualidades infantiles, funciones
+     * dirigidas a publico infantil.
+     * Publico objetivo: ninos y padres/cuidadores.
+     */
+    ACTIVIDAD_INFANTIL,
+
+    /**
+     * Recorrido guiado en movimiento por un espacio, a cargo de un guia.
+     * Incluye: tours por la biblioteca, recorridos historicos o tematicos
+     * del barrio/ciudad organizados por la biblioteca.
+     * Publico objetivo: quien quiere conocer un espacio o su historia de
+     * forma guiada.
+     */
+    VISITA_GUIADA
+}

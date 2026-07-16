@@ -1,0 +1,70 @@
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+@RestController
+@RequestMapping("/api/actividades")
+public class ActividadApiController {
+
+    @Autowired
+    private ActividadService actividadService;
+
+    // GET /api/actividades (dashboard admin)
+    @GetMapping
+    public ResponseEntity<List<Actividad>> listarTodasParaAdmin(
+            @RequestParam(required = false) EstadoActividad estado,
+            @RequestParam(required = false) TipoActividad tipo) {
+        List<Actividad> actividades = actividadService.listarTodasParaAdmin(estado, tipo);
+        return ResponseEntity.ok(actividades);
+    }
+
+    // GET /api/actividades/disponibles (catálogo público)
+    @GetMapping("/disponibles")
+    public ResponseEntity<List<Actividad>> listarActividadesDisponibles(
+            @RequestParam(required = false) TipoActividad tipo,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime desde,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime hasta) {
+        List<Actividad> disponibles = actividadService.listarActividadesDisponibles(tipo, desde, hasta);
+        return ResponseEntity.ok(disponibles);
+    }
+
+    // GET /api/actividades/{id} (pantalla de detalle)
+    @GetMapping("/{id}")
+    public ResponseEntity<Actividad> obtenerPorId(@PathVariable Long id) {
+        return actividadService.obtenerPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // POST /api/actividades/crear
+    @PostMapping("/crear")
+    public ResponseEntity<Actividad> crearActividad(@RequestBody Actividad actividad) {
+        try {
+            Actividad nuevaActividad = actividadService.crearActividad(actividad);
+            return ResponseEntity.status(HttpStatus.CREATED).body(nuevaActividad);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    // PUT /api/actividades/{id}
+    @PutMapping("/{id}")
+    public ResponseEntity<Actividad> actualizarActividad(
+            @PathVariable Long id,
+            @RequestBody Actividad actividadActualizada) {
+        try {
+            Actividad actualizada = actividadService.actualizarActividad(id, actividadActualizada);
+            return ResponseEntity.ok(actualizada);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    // PUT /api/actividades/{id}/cancelar
+    @PutMapping("/{id}/cancelar")
+    public ResponseEntity<Actividad> cancelarActividad(@PathVariable Long id) {
+        try {
+            Actividad cancelada = actividadService.cancelarActividad(id);
+            return ResponseEntity.ok(cancelada);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+}

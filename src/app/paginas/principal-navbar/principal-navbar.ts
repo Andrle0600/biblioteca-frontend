@@ -18,6 +18,7 @@ declare var bootstrap: any;
 })
 export class PrincipalNavbarComponent implements OnInit {
   usuarioAutenticado = false;
+  esAdmin = false;
   loginForm!: FormGroup;
   loginError: string | null = null;
 
@@ -41,9 +42,11 @@ export class PrincipalNavbarComponent implements OnInit {
     });
 
     this.usuarioAutenticado = this.authService.isAuthenticated();
+    this.esAdmin = this.authService.isAdmin();
     // Suscribirse a cambios de autenticación
     this.authService.user$.subscribe(user => {
       this.usuarioAutenticado = !!user;
+      this.esAdmin = this.authService.isAdmin();
     });
   }
 

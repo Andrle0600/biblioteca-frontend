@@ -1,0 +1,71 @@
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+@RestController
+@RequestMapping("/api/expositores")
+public class ExpositorApiController {
+
+    @Autowired
+    private ExpositorService expositorService;
+
+    @GetMapping
+    public ResponseEntity<List<Expositor>> obtenerExpositores() {
+        return ResponseEntity.ok(expositorService.listarExpositores());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Expositor> obtenerExpositor(@PathVariable Long id) {
+        return expositorService.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public ResponseEntity<Expositor> crearExpositor(@RequestBody Expositor expositor) {
+        Expositor expositorGuardado = expositorService.guardarExpositor(expositor);
+        return ResponseEntity.status(HttpStatus.CREATED).body(expositorGuardado);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Expositor> actualizarExpositor(@PathVariable Long id, @RequestBody Expositor expositor) {
+        if (expositor.getId() == null || !expositor.getId().equals(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        Optional<Expositor> existente = expositorService.buscarPorId(id);
+        if (existente.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Expositor actualizado = expositorService.guardarExpositor(expositor);
+        return ResponseEntity.ok(actualizado);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarExpositor(@PathVariable Long id) {
+        expositorService.eliminarExpositor(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/desactivar")
+    public ResponseEntity<Void> desactivarExpositor(@PathVariable Long id) {
+        boolean exito = expositorService.deshabilitarExpositor(id);
+        return exito ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/{id}/activar")
+    public ResponseEntity<Void> activarExpositor(@PathVariable Long id) {
+        boolean exito = expositorService.habilitarExpositor(id);
+        return exito ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/especialidades")
+    public ResponseEntity<List<String>> obtenerEspecialidades() {
+        return ResponseEntity.ok(expositorService.obtenerEspecialidades());
+    }
+
+    @GetMapping("/filtrar")
+    public ResponseEntity<List<Expositor>> filtrarExpositores(
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) String especialidad,
+            @RequestParam(required = false, defaultValue = "asc") String orden) {
+        List<Expositor> filtrados = expositorService.filtrarExpositores(nombre, especialidad, orden);
+        return ResponseEntity.ok(filtrados);
+    }
+}
