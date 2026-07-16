@@ -33,6 +33,20 @@ public class ActividadApiController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // GET /api/actividades/{id}/cupos
+    @GetMapping("/{id}/cupos")
+    public ResponseEntity<Map<String, Integer>> obtenerCupos(@PathVariable Long id) {
+        try {
+            int disponibles = actividadService.cuposDisponibles(id);
+            int capacidad = actividadService.obtenerPorId(id)
+                    .orElseThrow(() -> new RuntimeException("Actividad no encontrada"))
+                    .getCapacidad();
+            return ResponseEntity.ok(Map.of("capacidad", capacidad, "disponibles", disponibles));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     // POST /api/actividades/crear
     @PostMapping("/crear")
     public ResponseEntity<Actividad> crearActividad(@RequestBody Actividad actividad) {
