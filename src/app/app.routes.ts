@@ -37,6 +37,10 @@ export const routes: Routes = [
                 path: 'eventos',
                 component: Eventos
             },
+            {
+                path: 'eventos/:id',
+                loadComponent: () => import('./paginas/actividad-detalle/actividad-detalle').then(m => m.ActividadDetalle)
+            },
 
             { path: 'detalle/:slug', loadComponent: () => import('./paginas/detalle/detalle').then(m => m.Detalle) }
             ,

@@ -1,35 +1,43 @@
-import { CommonModule } from '@angular/common';
+﻿import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { ActividadesService } from '../../services/actividades';
+import { Actividad, TipoActividad } from '../../dashboard/actividades/actividad.model';
+import { ActividadCard } from './actividad-card';
 
 @Component({
   selector: 'app-eventos',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule, ActividadCard],
   templateUrl: './eventos.html',
   styleUrl: './eventos.scss'
 })
 export class Eventos implements OnInit {
 
-  eventosEspeciales = [
-    {
-      titulo: '📚 Feria del Libro Municipal 2025',
-      descripcion: 'Una semana llena de cultura, libros, autores invitados, actividades para niños y más. ¡No te la pierdas!',
-      fecha: 'Del 12 al 19 de julio · Parque Central de Ate',
-      imagen: 'https://i.imgur.com/enCfrd9.jpeg'
-    }
+  // ── Filtros ──────────────────────────────────────────────────────────────
+  tipoSeleccionado: TipoActividad | '' = '';
+  fechaDesde = '';
+  fechaHasta = '';
+
+  // ── Resultados ───────────────────────────────────────────────────────────
+  actividades: Actividad[] = [];
+  cargando = false;
+  error = false;
+
+  // ── Enum expuesto al template para el dropdown ───────────────────────────
+  readonly tiposActividad: { valor: TipoActividad; label: string }[] = [
+    { valor: TipoActividad.CLUB_DE_LECTURA,    label: 'Club de Lectura'    },
+    { valor: TipoActividad.TALLER,             label: 'Taller'             },
+    { valor: TipoActividad.CHARLA,             label: 'Charla'             },
+    { valor: TipoActividad.EXPOSICION,         label: 'Exposición'         },
+    { valor: TipoActividad.CINE,               label: 'Cine'               },
+    { valor: TipoActividad.ESPECTACULO,        label: 'Espectáculo'        },
+    { valor: TipoActividad.CONCURSO,           label: 'Concurso'           },
+    { valor: TipoActividad.ACTIVIDAD_INFANTIL, label: 'Actividad Infantil' },
+    { valor: TipoActividad.VISITA_GUIADA,      label: 'Visita Guiada'      },
   ];
 
-  eventos = [
-    { titulo: 'Club de Lectura Juvenil', descripcion: 'Espacio para compartir libros e ideas con jóvenes lectores apasionados.', horario: 'Jueves - 4:00 p.m.', imagen: 'https://i.imgur.com/HNjZHxj.jpeg' },
-    { titulo: 'Taller de Escritura Creativa', descripcion: 'Aprende a narrar tus propias historias con técnicas literarias modernas.', horario: 'Sábados - 10:00 a.m.', imagen: 'https://i.imgur.com/6L1Pbr8.png' },
-    { titulo: 'Cuentacuentos en Familia', descripcion: 'Tardes mágicas de cuentos interactivos y actividades para los más pequeños.', horario: 'Domingos - 3:00 p.m.', imagen: 'https://i.imgur.com/F4svXlJ.png' },
-    { titulo: 'Taller de Ilustración Infantil', descripcion: 'Clases de dibujo para niños de 6 a 12 años. Desarrolla su creatividad con arte y color.', horario: 'Viernes - 3:00 p.m.', imagen: 'https://images.unsplash.com/photo-1573164713988-8665fc963095' },
-    { titulo: 'Cine Comunitario', descripcion: 'Proyecciones gratuitas de cine peruano y latinoamericano al aire libre.', horario: 'Sábados - 6:30 p.m.', imagen: 'https://i.imgur.com/FjwrSiQ.jpeg' },
-    { titulo: 'Charlas de Historia Local', descripcion: 'Descubre el pasado de Ate con relatos y exposiciones.', horario: 'Miércoles - 5:00 p.m.', imagen: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1' },
-    { titulo: 'Taller de Teatro Juvenil', descripcion: 'Actuación, expresión corporal y montaje de obras.', horario: 'Martes y jueves - 4:00 p.m.', imagen: 'https://images.unsplash.com/photo-1596495577886-d920f1fb7238' },
-    { titulo: 'Club de Ajedrez', descripcion: 'Reúne a principiantes y expertos para aprender, practicar y competir.', horario: 'Domingos - 10:00 a.m.', imagen: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c' },
-    { titulo: 'Encuentro de Poetas', descripcion: 'Lecturas en vivo, micro abierto y presentación de libros.', horario: 'Una vez al mes - 7:00 p.m.', imagen: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2' }
-  ];
-
+  // ── Calendario ───────────────────────────────────────────────────────────
   calendarioEventos: { [key: string]: string[] } = {
     '2025-04-10': ['Club de Lectura Juvenil'],
     '2025-04-13': ['Cuentacuentos en Familia'],
@@ -42,51 +50,75 @@ export class Eventos implements OnInit {
   calendarTitle: string = '';
   days: { day: number | string, events: string[] }[] = [];
 
-  ngOnInit(): void {
-    this.renderCalendar();
-  }
-
   monthNames: string[] = [
     'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
   ];
+
+  constructor(private actividadesService: ActividadesService) {}
+
+  ngOnInit(): void {
+    this.renderCalendar();
+    this.buscarActividades();
+  }
+
+  // ── Búsqueda contra el API ────────────────────────────────────────────────
+  buscarActividades(): void {
+    this.cargando = true;
+    this.error    = false;
+
+    const tipo  = this.tipoSeleccionado || undefined;
+    // El backend espera ISO-8601: yyyy-MM-ddTHH:mm:ss
+    const desde = this.fechaDesde ? `${this.fechaDesde}T00:00:00` : undefined;
+    const hasta = this.fechaHasta ? `${this.fechaHasta}T23:59:59` : undefined;
+
+    this.actividadesService.getActividadesDisponibles(tipo, desde, hasta).subscribe({
+      next: (data) => {
+        this.actividades = data;
+        this.cargando    = false;
+      },
+      error: () => {
+        this.error    = true;
+        this.cargando = false;
+      }
+    });
+  }
+
+  // ── Calendario ───────────────────────────────────────────────────────────
   renderCalendar(): void {
-    const year = this.currentDate.getFullYear();
+    const year  = this.currentDate.getFullYear();
     const month = this.currentDate.getMonth();
-    const today = new Date();
 
-    const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-    this.calendarTitle = `${monthNames[month]} ${year}`;
+    this.calendarTitle = `${this.monthNames[month]} ${year}`;
 
-    const firstDay = new Date(year, month, 1).getDay();
+    const firstDay    = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
     this.days = [];
 
-    // Semana
+    // Encabezados de semana
     this.days.push(...['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'].map(day => ({ day, events: [] })));
 
-    // Vacíos previos
+    // Celdas vacías previas
     for (let i = 0; i < firstDay; i++) {
       this.days.push({ day: '', events: [] });
     }
 
-    // Días con eventos
+    // Días con posibles eventos
     for (let i = 1; i <= daysInMonth; i++) {
       const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-      const events = this.calendarioEventos[dateStr] || [];
+      const events  = this.calendarioEventos[dateStr] || [];
       this.days.push({ day: i, events });
     }
   }
 
-  prevMonth() {
+  prevMonth(): void {
     this.currentDate.setMonth(this.currentDate.getMonth() - 1);
     this.renderCalendar();
   }
 
-  nextMonth() {
+  nextMonth(): void {
     this.currentDate.setMonth(this.currentDate.getMonth() + 1);
     this.renderCalendar();
   }
-
 }

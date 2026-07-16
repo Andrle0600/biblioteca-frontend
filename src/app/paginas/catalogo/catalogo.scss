@@ -25,6 +25,25 @@
     border-bottom: 4px solid #0d6efd;
 }
 
+/* ── Panel de filtros ────────────────────────────────────────────────────── */
+.filtros-panel {
+    background: linear-gradient(135deg, #f0f4ff 0%, #f8f0ff 100%);
+    border: 1px solid rgba(13, 110, 253, 0.1);
+}
+
+.btn-buscar {
+    background: linear-gradient(90deg, #0d6efd 0%, #6610f2 100%);
+    color: #fff;
+    border: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+
+    &:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+        color: #fff;
+    }
+}
+
 
 @media (max-width: 576px) {
     .custom-card-img {

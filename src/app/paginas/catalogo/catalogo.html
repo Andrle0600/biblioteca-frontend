@@ -4,38 +4,72 @@
 </div>
 
 <!-- Formulario Reactivo -->
-<form [formGroup]="filtroForm" (ngSubmit)="filtrar()" class="row g-3 justify-content-center">
-    <div class="col-md-3">
-        <input type="text" class="form-control" formControlName="titulo" placeholder="Buscar por título...">
-    </div>
+<div class="container mb-4">
+    <div class="filtros-panel p-4 rounded-4 shadow-sm">
+        <form [formGroup]="filtroForm" (ngSubmit)="filtrar()">
+            <div class="row g-3 align-items-end">
 
-    <div class="col-md-2">
-        <select class="form-select" formControlName="editorial">
-            <option value="">Todas las editoriales</option>
-            <option *ngFor="let ed of editoriales" [value]="ed">{{ ed }}</option>
-        </select>
-    </div>
+                <!-- Buscar por título -->
+                <div class="col-12 col-md-3">
+                    <label for="filtro-titulo" class="form-label fw-semibold text-secondary small">
+                        <i class="bi bi-book me-1"></i> Título
+                    </label>
+                    <input type="text" id="filtro-titulo"
+                           class="form-control rounded-pill border-0 shadow-sm"
+                           formControlName="titulo"
+                           placeholder="Buscar por título...">
+                </div>
 
-    <div class="col-md-2">
-        <select class="form-select" formControlName="genero">
-            <option value="">Todos los géneros</option>
-            <option *ngFor="let gen of generos" [value]="gen">{{ gen }}</option>
-        </select>
-    </div>
+                <!-- Editorial -->
+                <div class="col-12 col-md-3">
+                    <label for="filtro-editorial" class="form-label fw-semibold text-secondary small">
+                        <i class="bi bi-building me-1"></i> Editorial
+                    </label>
+                    <select id="filtro-editorial"
+                            class="form-select rounded-pill border-0 shadow-sm"
+                            formControlName="editorial">
+                        <option value="">Todas las editoriales</option>
+                        <option *ngFor="let ed of editoriales" [value]="ed">{{ ed }}</option>
+                    </select>
+                </div>
 
-    <div class="col-md-2">
-        <select class="form-select" formControlName="orden">
-            <option value="asc">A-Z</option>
-            <option value="desc">Z-A</option>
-        </select>
-    </div>
+                <!-- Género -->
+                <div class="col-12 col-md-2">
+                    <label for="filtro-genero" class="form-label fw-semibold text-secondary small">
+                        <i class="bi bi-tag me-1"></i> Género
+                    </label>
+                    <select id="filtro-genero"
+                            class="form-select rounded-pill border-0 shadow-sm"
+                            formControlName="genero">
+                        <option value="">Todos los géneros</option>
+                        <option *ngFor="let gen of generos" [value]="gen">{{ gen }}</option>
+                    </select>
+                </div>
 
-    <div class="col-md-2">
-        <button type="submit" class="btn btn-primary w-100">
-            <i class="bi bi-search"></i> Filtrar
-        </button>
+                <!-- Orden -->
+                <div class="col-12 col-md-2">
+                    <label for="filtro-orden" class="form-label fw-semibold text-secondary small">
+                        <i class="bi bi-sort-alpha-down me-1"></i> Orden
+                    </label>
+                    <select id="filtro-orden"
+                            class="form-select rounded-pill border-0 shadow-sm"
+                            formControlName="orden">
+                        <option value="asc">A-Z</option>
+                        <option value="desc">Z-A</option>
+                    </select>
+                </div>
+
+                <!-- Botón filtrar -->
+                <div class="col-12 col-md-2 d-grid">
+                    <button type="submit" class="btn btn-buscar rounded-pill fw-semibold">
+                        <i class="bi bi-search me-1"></i> Filtrar
+                    </button>
+                </div>
+
+            </div>
+        </form>
     </div>
-</form>
+</div>
 
 <!-- Resultados -->
 <div class="container my-5">
