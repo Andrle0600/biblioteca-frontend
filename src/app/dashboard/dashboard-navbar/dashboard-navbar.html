@@ -24,6 +24,9 @@
                     <a class="nav-link" routerLink="/dashboard/expositores" routerLinkActive="active">Expositores</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" routerLink="/dashboard/actividades" routerLinkActive="active">Actividades</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" routerLink="/dashboard/reservas" routerLinkActive="active">Reservas Activas</a>
                 </li>
                 <li class="nav-item">
@@ -33,14 +36,24 @@
                 <li class="nav-item">
                     <a class="nav-link" routerLink="/dashboard/historial" routerLinkActive="active">Historial</a>
                 </li>
-                <li class="nav-item">
-                    <a class="btn btn-success nav-link text-white" routerLink="/"><i
-                            class="bi bi-book-fill me-2"></i>Biblioteca</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-danger nav-link text-white" (click)="logout()">
-                        <i class="bi bi-box-arrow-left me-2"></i>Cerrar Sesión
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi bi-person-circle me-1"></i>Opciones
                     </a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
+                        <li>
+                            <a class="dropdown-item" routerLink="/">
+                                <i class="bi bi-book-fill me-2"></i>Biblioteca
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-danger" (click)="logout()" style="cursor: pointer;">
+                                <i class="bi bi-box-arrow-left me-2"></i>Cerrar Sesión
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
 

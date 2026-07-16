@@ -1,3 +1,5 @@
+import { Actividad } from '../actividades/actividad.model';
+
 export interface Expositor {
     id?: number;
     nombres: string;
@@ -8,4 +10,5 @@ export interface Expositor {
     username?: string;
     password?: string;
     enabled: boolean;
+    actividades?: Actividad[];
 }

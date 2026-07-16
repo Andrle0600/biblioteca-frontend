@@ -31,6 +31,7 @@
                         <th class="text-center">Apellidos</th>
                         <th class="text-center">Especialidad</th>
                         <th class="text-center">Estado</th>
+                        <th class="text-center">Actividades</th>
                         <th class="text-center">Acciones</th>
                     </tr>
                 </thead>
@@ -43,6 +44,13 @@
                         <td class="text-center align-middle">
                             <span [ngClass]="exp.enabled ? 'text-success' : 'text-danger'">
                                 {{ exp.enabled ? 'Activo' : 'Inactivo' }}
+                            </span>
+                        </td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill border px-3 py-1.5 shadow-sm"
+                                [ngClass]="getConteoActividades(exp.id) > 0 ? 'bg-success-subtle text-success border-success-subtle' : 'bg-danger-subtle text-danger border-danger-subtle'"
+                                style="font-size: 0.85rem; font-weight: 600;">
+                                {{ getConteoActividades(exp.id) }}
                             </span>
                         </td>
                         <td class="text-center align-middle">
@@ -60,7 +68,7 @@
                         </td>
                     </tr>
                     <tr *ngIf="expositores.length === 0">
-                        <td colspan="6" class="text-center py-3">No se encontraron expositores</td>
+                        <td colspan="7" class="text-center py-3">No se encontraron expositores</td>
                     </tr>
                 </tbody>
             </table>

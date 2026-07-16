@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ExpositoresService } from '../../services/expositores';
+import { ActividadesService } from '../../services/actividades';
 import { Expositor } from './expositor.model';
+import { Actividad } from '../actividades/actividad.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 declare var bootstrap: any;
@@ -15,6 +17,7 @@ declare var bootstrap: any;
 export class Expositores implements OnInit {
   expositores: Expositor[] = [];
   especialidades: string[] = [];
+  actividadesPorExpositor: Map<number, number> = new Map();
   
   terminoNombre: string = '';
   terminoEspecialidad: string = '';
@@ -23,11 +26,15 @@ export class Expositores implements OnInit {
   expositor: Expositor = this.nuevoExpositor();
   private modalInstance: any = null;
 
-  constructor(private expositoresService: ExpositoresService) {}
+  constructor(
+    private expositoresService: ExpositoresService,
+    private actividadesService: ActividadesService
+  ) {}
 
   ngOnInit(): void {
     this.cargarExpositores();
     this.cargarEspecialidades();
+    this.cargarConteoActividades();
   }
 
   cargarExpositores(): void {
@@ -42,6 +49,26 @@ export class Expositores implements OnInit {
       next: (data) => this.especialidades = data,
       error: (err) => console.error('Error al cargar especialidades', err)
     });
+  }
+
+  cargarConteoActividades(): void {
+    this.actividadesService.getActividades().subscribe({
+      next: (actividades: Actividad[]) => {
+        this.actividadesPorExpositor = new Map();
+        actividades.forEach(act => {
+          if (act.expositor?.id !== undefined) {
+            const id = act.expositor.id!;
+            this.actividadesPorExpositor.set(id, (this.actividadesPorExpositor.get(id) ?? 0) + 1);
+          }
+        });
+      },
+      error: (err) => console.error('Error al cargar actividades', err)
+    });
+  }
+
+  getConteoActividades(expId?: number): number {
+    if (expId === undefined) return 0;
+    return this.actividadesPorExpositor.get(expId) ?? 0;
   }
 
   buscar(): void {
