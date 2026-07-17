@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import * as pdfMake from 'pdfmake/build/pdfmake';
-import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import * as pdfFontsModule from 'pdfmake/build/vfs_fonts';
 import { ReservasService } from '../../../services/reservas';
 import { Reserva } from '../../reservas/reservas.model';
 
 // Configurar fuentes virtuales para que pdfmake funcione en el navegador
-(<any>pdfMake).vfs = vfs;
+const pdfFonts: any = pdfFontsModule;
+(<any>pdfMake).vfs = pdfFonts.vfs || pdfFonts.default?.vfs || pdfFonts.pdfMake?.vfs || pdfFonts.default;
 
 @Injectable({
   providedIn: 'root'
