@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // ═══════════════════════════════════════════════════════════════════════════
 // TOKENS DE COLOR — coherentes con el tema Bootstrap del proyecto
 // ═══════════════════════════════════════════════════════════════════════════
@@ -265,7 +267,7 @@ $color-wrapper-border:    #dde3ed;
 
   &:hover {
     background: $color-disponible-hover;
-    border-color: darken($color-disponible-border, 10%);
+    border-color: color.adjust($color-disponible-border, $lightness: -10%);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(40, 167, 69, 0.25);
   }

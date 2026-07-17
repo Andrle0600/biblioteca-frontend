@@ -8,7 +8,10 @@ import { Reserva } from '../../reservas/reservas.model';
 
 // Configurar fuentes virtuales para que pdfmake funcione en el navegador
 const pdfFonts: any = pdfFontsModule;
-(<any>pdfMake).vfs = pdfFonts.vfs || pdfFonts.default?.vfs || pdfFonts.pdfMake?.vfs || pdfFonts.default;
+const fontsVfs = pdfFonts.vfs || pdfFonts.default?.vfs || pdfFonts.pdfMake?.vfs || pdfFonts.default;
+if (typeof pdfMake.addVirtualFileSystem === 'function') {
+  pdfMake.addVirtualFileSystem(fontsVfs);
+}
 
 @Injectable({
   providedIn: 'root'
@@ -119,7 +122,7 @@ export class GestionAtrasosReporteService {
 
     // 6. Generar y descargar el PDF
     const fileName = `gestion-atrasos-${anio}${mes}${dia}.pdf`;
-    pdfMake.createPdf(docDefinition).download(fileName);
+    (pdfMake as any).createPdf(docDefinition, undefined, undefined, fontsVfs).download(fileName);
   }
 
   public filtrarAtrasadasPorFechaEstimada(reservas: Reserva[]): Reserva[] {
