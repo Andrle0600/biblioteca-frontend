@@ -7,7 +7,7 @@ import { ReservasService } from '../../../services/reservas';
 import { Reserva } from '../../reservas/reservas.model';
 
 // Configurar fuentes virtuales para que pdfmake funcione en el navegador
-pdfMake.addVirtualFileSystem(pdfFonts);
+(<any>pdfMake).vfs = vfs;
 
 @Injectable({
   providedIn: 'root'
