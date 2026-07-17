@@ -75,7 +75,7 @@ export class InventarioLibrosReporteService {
     workbook.creator = 'Sistema de Biblioteca';
     workbook.created = ahora;
     workbook.modified = ahora;
-    workbook.properties.title = `Inventario de Libros — ${yyyy}-${MM}-${dd}`;
+    workbook.title = `Inventario de Libros — ${yyyy}-${MM}-${dd}`;
 
     // 4. Construir Hoja 1 — "Libros"
     this.construirHojaLibros(workbook, libros);

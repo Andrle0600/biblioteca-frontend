@@ -1,40 +1,156 @@
-<div class="container-fluid">
-    <div class="row mt-4">
-        <h2>Historial de reservas</h2>
-
-        <!--Formulario de búsqueda-->
-
-        <div class="table-responsive">
-            <table class="table table-striped table-sm">
-                <thead>
-                    <tr>
-                        <th class="text-center">#</th>
-                        <th class="text-center">Usuario</th>
-                        <th class="text-center">Libro</th>
-                        <th class="text-center">Código de ejemplar</th>
-                        <th class="text-center">Fecha Reserva</th>
-                        <th class="text-center">Fecha Estimada de Devolución</th>
-                        <th class="text-center">Fecha Real de Devolución</th>
-                        <th class="text-center">Estado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let reserva of reservas; let i=index">
-                        <td class="text-center">{{i+1}}</td>
-                        <td class="text-center">{{reserva.user.nombres}} {{reserva.user.apellidos}}</td>
-                        <td class="text-center">{{reserva.ejemplar.libro?.titulo}}</td>
-                        <td class="text-center">{{reserva.ejemplar.codigoEjemplar}}</td>
-                        <td class="text-center">{{reserva.fechaReserva|date:"dd/MM/yyyy"}}</td>
-                        <td class="text-center">{{reserva.fechaEstimadaDevolucion|date:"dd/MM/yyyy"}}</td>
-                        <td class="text-center">
-                            <span [ngClass]="reserva.fechaRealDevolucion==null?'text-danger':'text-dark'">
-                                {{reserva.fechaRealDevolucion==null?'No devuelto':reserva.fechaRealDevolucion|date:"dd/MM/yyyy"}}
-                            </span>
-                        </td>
-                        <td class="text-center">{{reserva.estado}}</td>
-                    </tr>
-                </tbody>
-            </table>
+<div class="container mt-5 mb-5">
+    <div class="row mb-4 text-center">
+        <div class="col">
+            <h2 class="fw-bold text-primary custom-titulo pb-2">Centro de Reportes</h2>
+            <p class="text-muted fs-5 mt-2">Genera y descarga reportes en formatos Excel y PDF de manera rápida y segura.</p>
         </div>
     </div>
-</div>
+
+    <!-- Mensajes de Feedback -->
+    <div class="row mb-4 justify-content-center" *ngIf="successMessage || errorMessage">
+        <div class="col-lg-10">
+            <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show rounded-3 shadow-sm border-0 d-flex align-items-center" role="alert">
+                <i class="bi bi-check-circle-fill me-2 fs-5 text-success"></i>
+                <div>{{ successMessage }}</div>
+                <button type="button" class="btn-close" (click)="limpiarMensajes()" aria-label="Cerrar"></button>
+            </div>
+
+            <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show rounded-3 shadow-sm border-0 d-flex align-items-center" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2 fs-5 text-danger"></i>
+                <div>{{ errorMessage }}</div>
+                <button type="button" class="btn-close" (click)="limpiarMensajes()" aria-label="Cerrar"></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- 1. Reporte de Inventario de Libros -->
+            <div class="card reporte-card mb-4 shadow-sm border-0 rounded-4">
+                <div class="row g-0 align-items-center">
+                    <div class="col-md-2 d-none d-md-flex align-items-center justify-content-center icon-container rounded-start-4">
+                        <i class="bi bi-file-earmark-excel-fill text-success fs-1"></i>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="card-body">
+                            <!-- Tipo al medio/arriba (imitando estilo catálogo) -->
+                            <span class="badge bg-success bg-opacity-10 text-success fw-semibold mb-2 py-1 px-3 rounded-pill" style="font-size: 0.8rem;">
+                                Excel (.xlsx)
+                            </span>
+                            <h5 class="card-title fw-bold text-dark mt-1">Inventario de Libros y Ejemplares</h5>
+                            <p class="card-text text-muted small mb-3">
+                                Genera un reporte completo del catálogo de libros existentes. Contiene dos hojas: una con el catálogo de libros y otra con la lista detallada de cada copia física (ejemplar) y su estado de conservación.
+                            </p>
+                            <div class="info-row text-warning bg-warning bg-opacity-10 p-2 rounded-3 border border-warning border-opacity-25 mt-2">
+                                <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+                                <span class="small fw-semibold">Importante: Para el correcto funcionamiento del sistema, no modifique el nombre del archivo al guardarlo.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 p-4 d-grid text-center">
+                        <button class="btn btn-primary rounded-pill py-2 fw-semibold w-100" 
+                                [disabled]="loadingInventario" 
+                                (click)="descargarInventario()">
+                            <span *ngIf="loadingInventario" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                            <i *ngIf="!loadingInventario" class="bi bi-download me-2"></i>
+                            {{ loadingInventario ? 'Generando...' : 'Descargar' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Reporte de Actividad de Préstamos (Con filtros de fecha) -->
+            <div class="card reporte-card mb-4 shadow-sm border-0 rounded-4">
+                <div class="row g-0 align-items-center">
+                    <div class="col-md-2 d-none d-md-flex align-items-center justify-content-center icon-container rounded-start-4">
+                        <i class="bi bi-file-earmark-spreadsheet-fill text-primary fs-1"></i>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="card-body">
+                            <span class="badge bg-primary bg-opacity-10 text-primary fw-semibold mb-2 py-1 px-3 rounded-pill" style="font-size: 0.8rem;">
+                                Excel (.xlsx)
+                            </span>
+                            <h5 class="card-title fw-bold text-dark mt-1">Actividad de Préstamos</h5>
+                            <p class="card-text text-muted small mb-3">
+                                Obtén un historial detallado de todas las reservas de libros creadas dentro del rango de fechas especificado. Incluye información de usuario, libro, código de ejemplar y las fechas de reserva y devoluciones.
+                            </p>
+
+                            <!-- Formulario de Rango de Fechas -->
+                            <form [formGroup]="filtroForm" class="row g-3 p-3 bg-light rounded-3 mb-3 border border-opacity-10">
+                                <div class="col-sm-6">
+                                    <label for="fechaDesde" class="form-label fw-semibold text-secondary small">
+                                        <i class="bi bi-calendar-event me-1"></i> Fecha Inicio
+                                    </label>
+                                    <input type="date" id="fechaDesde" formControlName="fechaDesde" 
+                                           class="form-control rounded-pill border-0 shadow-sm"
+                                           [class.is-invalid]="filtroForm.get('fechaDesde')?.touched && filtroForm.get('fechaDesde')?.invalid">
+                                    <div class="invalid-feedback small">La fecha de inicio es requerida.</div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="fechaHasta" class="form-label fw-semibold text-secondary small">
+                                        <i class="bi bi-calendar-event me-1"></i> Fecha Fin
+                                    </label>
+                                    <input type="date" id="fechaHasta" formControlName="fechaHasta" 
+                                           class="form-control rounded-pill border-0 shadow-sm"
+                                           [class.is-invalid]="filtroForm.get('fechaHasta')?.touched && (filtroForm.get('fechaHasta')?.invalid || filtroForm.errors?.['rangoInvalido'])">
+                                    <div class="invalid-feedback small" *ngIf="filtroForm.get('fechaHasta')?.errors?.['required']">La fecha de fin es requerida.</div>
+                                    <div class="text-danger small mt-1" *ngIf="filtroForm.errors?.['rangoInvalido'] && (filtroForm.get('fechaHasta')?.touched || filtroForm.get('fechaDesde')?.touched)">
+                                        La fecha de inicio no puede ser posterior a la de fin.
+                                    </div>
+                                </div>
+                            </form>
+
+                            <div class="info-row text-warning bg-warning bg-opacity-10 p-2 rounded-3 border border-warning border-opacity-25 mt-2">
+                                <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+                                <span class="small fw-semibold">Importante: Para el correcto funcionamiento del sistema, no modifique el nombre del archivo al guardarlo.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 p-4 d-grid text-center">
+                        <button class="btn btn-primary rounded-pill py-2 fw-semibold w-100" 
+                                [disabled]="loadingActividades || filtroForm.invalid" 
+                                (click)="descargarActividades()">
+                            <span *ngIf="loadingActividades" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                            <i *ngIf="!loadingActividades" class="bi bi-download me-2"></i>
+                            {{ loadingActividades ? 'Generando...' : 'Descargar' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Reporte de Gestión de Atrasos -->
+            <div class="card reporte-card mb-4 shadow-sm border-0 rounded-4">
+                <div class="row g-0 align-items-center">
+                    <div class="col-md-2 d-none d-md-flex align-items-center justify-content-center icon-container rounded-start-4">
+                        <i class="bi bi-file-earmark-pdf-fill text-danger fs-1"></i>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="card-body">
+                            <span class="badge bg-danger bg-opacity-10 text-danger fw-semibold mb-2 py-1 px-3 rounded-pill" style="font-size: 0.8rem;">
+                                PDF (.pdf)
+                            </span>
+                            <h5 class="card-title fw-bold text-dark mt-1">Gestión de Atrasos y Devoluciones</h5>
+                            <p class="card-text text-muted small mb-3">
+                                Genera un documento PDF formal con el listado de préstamos vencidos, es decir, aquellas reservas cuyo plazo estimado de devolución ya expiró y aún no han retornado físicamente. Incluye datos de contacto del usuario.
+                            </p>
+                            <div class="info-row text-warning bg-warning bg-opacity-10 p-2 rounded-3 border border-warning border-opacity-25 mt-2">
+                                <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+                                <span class="small fw-semibold">Importante: Para el correcto funcionamiento del sistema, no modifique el nombre del archivo al guardarlo.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 p-4 d-grid text-center">
+                        <button class="btn btn-primary rounded-pill py-2 fw-semibold w-100" 
+                                [disabled]="loadingAtrasos" 
+                                (click)="descargarAtrasos()">
+                            <span *ngIf="loadingAtrasos" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                            <i *ngIf="!loadingAtrasos" class="bi bi-download me-2"></i>
+                            {{ loadingAtrasos ? 'Generando...' : 'Descargar' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

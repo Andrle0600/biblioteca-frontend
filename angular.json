@@ -43,14 +43,21 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "4MB",
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "8kB",
+                  "maximumError": "12kB"
                 }
+              ],
+              "allowedCommonJsDependencies": [
+                "exceljs",
+                "pdfmake",
+                "pdfmake/build/pdfmake",
+                "pdfmake/build/vfs_fonts",
+                "file-saver"
               ],
               "outputHashing": "all"
             },
