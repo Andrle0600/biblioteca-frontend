@@ -3,6 +3,7 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { FontSizeService, FontSize } from '../../services/font-size.service';
+import { ColorblindService, ColorblindMode } from '../../services/colorblind.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -14,15 +15,18 @@ import { CommonModule } from '@angular/common';
 export class DashboardNavbar {
 
   currentFontSize$!: Observable<FontSize>;
+  colorblindMode$!: Observable<ColorblindMode>;
   mobileMenuOpen = false;
   accessibilityDropdownOpen = false;
 
   constructor(
     private authService: AuthService,
     public fontSizeService: FontSizeService,
+    public colorblindService: ColorblindService,
     private elRef: ElementRef
   ){
     this.currentFontSize$ = fontSizeService.currentSize$;
+    this.colorblindMode$ = colorblindService.currentMode$;
   }
 
   @HostListener('document:click', ['$event'])
@@ -38,6 +42,10 @@ export class DashboardNavbar {
 
   setFontSize(size: FontSize) {
     this.fontSizeService.setFontSize(size);
+  }
+
+  setColorblindMode(mode: string) {
+    this.colorblindService.setMode(mode as ColorblindMode);
   }
 
   toggleMobileFontMenu() {

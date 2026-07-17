@@ -123,22 +123,30 @@
             <span class="a11y-section-title">Daltonismo</span>
             <div class="a11y-colorblind-options">
               <label class="a11y-cb-option">
-                <input type="radio" name="colorblind" value="none" checked />
+                <input type="radio" name="colorblind" value="none"
+                    [checked]="(colorblindMode$ | async) === 'none'"
+                    (change)="setColorblindMode('none')" />
                 <span class="a11y-cb-dot none"></span>
                 Ninguna
               </label>
               <label class="a11y-cb-option">
-                <input type="radio" name="colorblind" value="deuteranomaly" />
+                <input type="radio" name="colorblind" value="deuteranomaly"
+                    [checked]="(colorblindMode$ | async) === 'deuteranomaly'"
+                    (change)="setColorblindMode('deuteranomaly')" />
                 <span class="a11y-cb-dot deuteranomaly"></span>
                 Deuteranomalía (verde)
               </label>
               <label class="a11y-cb-option">
-                <input type="radio" name="colorblind" value="protanomaly" />
+                <input type="radio" name="colorblind" value="protanomaly"
+                    [checked]="(colorblindMode$ | async) === 'protanomaly'"
+                    (change)="setColorblindMode('protanomaly')" />
                 <span class="a11y-cb-dot protanomaly"></span>
                 Protanomalía (rojo)
               </label>
               <label class="a11y-cb-option">
-                <input type="radio" name="colorblind" value="tritanomaly" />
+                <input type="radio" name="colorblind" value="tritanomaly"
+                    [checked]="(colorblindMode$ | async) === 'tritanomaly'"
+                    (change)="setColorblindMode('tritanomaly')" />
                 <span class="a11y-cb-dot tritanomaly"></span>
                 Tritanomalía (azul)
               </label>
@@ -231,22 +239,30 @@
       <span class="a11y-section-title">Daltonismo</span>
       <div class="a11y-colorblind-options">
         <label class="a11y-cb-option">
-          <input type="radio" name="colorblind-mob" value="none" checked />
+          <input type="radio" name="colorblind-mob" value="none"
+              [checked]="(colorblindMode$ | async) === 'none'"
+              (change)="setColorblindMode('none')" />
           <span class="a11y-cb-dot none"></span>
           Ninguna
         </label>
         <label class="a11y-cb-option">
-          <input type="radio" name="colorblind-mob" value="deuteranomaly" />
+          <input type="radio" name="colorblind-mob" value="deuteranomaly"
+              [checked]="(colorblindMode$ | async) === 'deuteranomaly'"
+              (change)="setColorblindMode('deuteranomaly')" />
           <span class="a11y-cb-dot deuteranomaly"></span>
           Deuteranomalía (verde)
         </label>
         <label class="a11y-cb-option">
-          <input type="radio" name="colorblind-mob" value="protanomaly" />
+          <input type="radio" name="colorblind-mob" value="protanomaly"
+              [checked]="(colorblindMode$ | async) === 'protanomaly'"
+              (change)="setColorblindMode('protanomaly')" />
           <span class="a11y-cb-dot protanomaly"></span>
           Protanomalía (rojo)
         </label>
         <label class="a11y-cb-option">
-          <input type="radio" name="colorblind-mob" value="tritanomaly" />
+          <input type="radio" name="colorblind-mob" value="tritanomaly"
+              [checked]="(colorblindMode$ | async) === 'tritanomaly'"
+              (change)="setColorblindMode('tritanomaly')" />
           <span class="a11y-cb-dot tritanomaly"></span>
           Tritanomalía (azul)
         </label>

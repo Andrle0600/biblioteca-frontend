@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { FontSizeService, FontSize } from '../../services/font-size.service';
+import { ColorblindService, ColorblindMode } from '../../services/colorblind.service';
 
 declare var bootstrap: any;
 
@@ -24,6 +25,7 @@ export class PrincipalNavbarComponent implements OnInit {
 
   // Accesibilidad
   currentFontSize$!: Observable<FontSize>;
+  colorblindMode$!: Observable<ColorblindMode>;
   mobileMenuOpen = false;
   accessibilityDropdownOpen = false;
 
@@ -32,9 +34,11 @@ export class PrincipalNavbarComponent implements OnInit {
     private authService: AuthService,  // Usa el AuthService
     private router: Router,
     public fontSizeService: FontSizeService,
+    public colorblindService: ColorblindService,
     private elRef: ElementRef
   ) {
     this.currentFontSize$ = fontSizeService.currentSize$;
+    this.colorblindMode$ = colorblindService.currentMode$;
   }
 
   @HostListener('document:click', ['$event'])
@@ -95,6 +99,10 @@ export class PrincipalNavbarComponent implements OnInit {
 
   setFontSize(size: FontSize) {
     this.fontSizeService.setFontSize(size);
+  }
+
+  setColorblindMode(mode: string) {
+    this.colorblindService.setMode(mode as ColorblindMode);
   }
 
   toggleMobileFontMenu() {
