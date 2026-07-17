@@ -47,7 +47,7 @@ export class Registrar {
       return;
     }
 
-    this.http.post('https://api.utpbiblio.dpdns.org/api/auth/registrar', this.registroForm.value, { responseType: 'text' })
+    this.http.post('http://localhost:8080/api/auth/registrar', this.registroForm.value, { responseType: 'text' })
       .subscribe({
         next: () => {
           this.toastService.success('¡Registro exitoso! Ya puede iniciar sesión.');

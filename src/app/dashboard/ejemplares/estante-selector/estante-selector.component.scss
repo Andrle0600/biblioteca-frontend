@@ -10,7 +10,7 @@ $color-disponible-hover:  #c8ecd3;
 $color-ocupado-bg:        #fde8e8;
 $color-ocupado-border:    #dc3545;
 $color-ocupado-text:      #8b1a1a;
-$color-ocupado-stripe:    rgba(220, 53, 69, 0.08);
+$color-ocupado-stripe:    rgba(220, 53, 69, 0.2);
 
 $color-selec-bg:          #dbeafe;
 $color-selec-border:      #0d6efd;
@@ -354,14 +354,61 @@ $color-wrapper-border:    #dde3ed;
 }
 
 .legend-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 5px;
   border: 1.5px solid transparent;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
 
-  &.dot-disponible  { background: $color-disponible-bg;  border-color: $color-disponible-border; }
-  &.dot-ocupado     { background: $color-ocupado-bg;     border-color: $color-ocupado-border; }
-  &.dot-seleccionado{ background: $color-selec-bg;       border-color: $color-selec-border; }
-  &.dot-inactivo    { background: $color-inactivo-bg;    border-color: $color-inactivo-border; border-style: dashed; }
+  i {
+    font-size: 13px;
+    position: relative;
+    z-index: 1;
+  }
+
+  &.dot-disponible {
+    background: $color-disponible-bg;
+    border-color: $color-disponible-border;
+    color: $color-disponible-text;
+  }
+
+  &.dot-ocupado {
+    background-color: $color-ocupado-bg;
+    border-color: $color-ocupado-border;
+    color: $color-ocupado-text;
+    cursor: not-allowed;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 4px,
+        $color-ocupado-stripe 4px,
+        $color-ocupado-stripe 8px
+      );
+      pointer-events: none;
+    }
+  }
+
+  &.dot-seleccionado {
+    background: $color-selec-bg;
+    border-color: $color-selec-border;
+    color: $color-selec-text;
+  }
+
+  &.dot-inactivo {
+    background: $color-inactivo-bg;
+    border-color: $color-inactivo-border;
+    border-style: dashed;
+    color: $color-inactivo-text;
+    opacity: 0.7;
+  }
 }

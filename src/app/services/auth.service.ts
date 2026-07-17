@@ -7,7 +7,7 @@ import { UsuariosService } from './usuarios';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = 'https://api.utpbiblio.dpdns.org/api/auth/login';
+  private apiUrl = 'http://localhost:8080/api/auth/login';
   public userSubject = new BehaviorSubject<any>(this.getUsuario());
   public user$ = this.userSubject.asObservable();
 

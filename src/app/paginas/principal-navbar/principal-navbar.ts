@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
@@ -25,14 +25,23 @@ export class PrincipalNavbarComponent implements OnInit {
   // Accesibilidad
   currentFontSize$!: Observable<FontSize>;
   mobileMenuOpen = false;
+  accessibilityDropdownOpen = false;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,  // Usa el AuthService
     private router: Router,
-    public fontSizeService: FontSizeService
+    public fontSizeService: FontSizeService,
+    private elRef: ElementRef
   ) {
     this.currentFontSize$ = fontSizeService.currentSize$;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.elRef.nativeElement.contains(event.target)) {
+      this.accessibilityDropdownOpen = false;
+    }
   }
 
   ngOnInit(): void {
@@ -90,5 +99,9 @@ export class PrincipalNavbarComponent implements OnInit {
 
   toggleMobileFontMenu() {
     this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  toggleAccessibilityDropdown() {
+    this.accessibilityDropdownOpen = !this.accessibilityDropdownOpen;
   }
 }

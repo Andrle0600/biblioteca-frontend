@@ -1,61 +1,66 @@
-﻿<div class="actividad-card mb-4" *ngIf="!ocultar">
+<div class="card h-100 position-relative actividad-card mb-4" *ngIf="!ocultar">
 
   <!-- Imagen -->
   <div class="card-img-wrap">
     <img
       [src]="actividad.imagenUrl || 'https://placehold.co/220x180/e2e8f0/94a3b8?text=Sin+imagen'"
-      [alt]="actividad.nombre">
+      [alt]="actividad.nombre"
+      class="card-img-top">
   </div>
 
-  <!-- Información -->
-  <div class="card-body">
+  <!-- Tipo al medio (rescatando estilo btn-info de libros) -->
+  <span class="btn btn-info rounded-0 text-dark fw-semibold py-1" style="font-size: 0.85rem;">
+    {{ tipoLabel(actividad.tipoActividad) }}
+  </span>
 
-    <!-- Badge tipo -->
-    <span class="badge-tipo">{{ tipoLabel(actividad.tipoActividad) }}</span>
+  <!-- Información abajo -->
+  <div class="card-body d-flex flex-column">
 
     <!-- Nombre -->
-    <h5 class="card-title">{{ actividad.nombre }}</h5>
+    <h5 class="card-title mb-3">{{ actividad.nombre }}</h5>
 
-    <!-- Fecha y hora -->
-    <div class="info-row">
-      <i class="bi bi-calendar-event"></i>
-      <span>{{ actividad.fechaHora | date:"EEEE d 'de' MMMM, yyyy · HH:mm" }}</span>
+    <div class="d-flex flex-column gap-2 mb-4">
+      <!-- Fecha y hora -->
+      <div class="info-row">
+        <i class="bi bi-calendar-event"></i>
+        <span>{{ actividad.fechaHora | date:"EEEE d 'de' MMMM, yyyy · HH:mm" }}</span>
+      </div>
+
+      <!-- Duración -->
+      <div class="info-row" *ngIf="actividad.duracionMinutos">
+        <i class="bi bi-clock"></i>
+        <span>{{ actividad.duracionMinutos }} min</span>
+      </div>
+
+      <!-- Lugar -->
+      <div class="info-row">
+        <i class="bi bi-geo-alt"></i>
+        <span>{{ lugarLabel(actividad.lugar) }}</span>
+      </div>
+
+      <!-- Cupos -->
+      <div class="info-row">
+        <i class="bi bi-people"></i>
+        <span *ngIf="cargandoCupos" class="cupos-cargando">Verificando cupos…</span>
+        <span *ngIf="!cargandoCupos && cupos !== null"
+              [class.cupos-alerta]="esAlerta"
+              [class.cupos-ok]="!esAlerta">
+          {{ cupos!.disponibles }} cupos disponibles
+          <span *ngIf="esAlerta"> — ¡Últimos lugares!</span>
+        </span>
+      </div>
+
+      <!-- Expositor (solo si existe) -->
+      <div class="info-row" *ngIf="actividad.expositor">
+        <i class="bi bi-person-badge"></i>
+        <span>{{ actividad.expositor!.nombres }} {{ actividad.expositor!.apellidos }}</span>
+      </div>
     </div>
 
-    <!-- Duración -->
-    <div class="info-row" *ngIf="actividad.duracionMinutos">
-      <i class="bi bi-clock"></i>
-      <span>{{ actividad.duracionMinutos }} min</span>
-    </div>
-
-    <!-- Lugar -->
-    <div class="info-row">
-      <i class="bi bi-geo-alt"></i>
-      <span>{{ lugarLabel(actividad.lugar) }}</span>
-    </div>
-
-    <!-- Cupos -->
-    <div class="info-row">
-      <i class="bi bi-people"></i>
-      <span *ngIf="cargandoCupos" class="cupos-cargando">Verificando cupos…</span>
-      <span *ngIf="!cargandoCupos && cupos !== null"
-            [class.cupos-alerta]="esAlerta"
-            [class.cupos-ok]="!esAlerta">
-        {{ cupos!.disponibles }} cupos disponibles
-        <span *ngIf="esAlerta"> — ¡Últimos lugares!</span>
-      </span>
-    </div>
-
-    <!-- Expositor (solo si existe) -->
-    <div class="info-row" *ngIf="actividad.expositor">
-      <i class="bi bi-person-badge"></i>
-      <span>{{ actividad.expositor!.nombres }} {{ actividad.expositor!.apellidos }}</span>
-    </div>
-
-    <!-- Botón de inscripción -->
-    <div class="mt-auto pt-3">
+    <!-- Botón de inscripción grande y principal -->
+    <div class="mt-auto">
       <a [routerLink]="['/eventos', actividad.id]"
-         class="btn btn-inscribirse rounded-pill px-4 fw-semibold">
+         class="btn btn-primary rounded-pill w-100 py-2 fw-semibold">
         <i class="bi bi-pencil-square me-2"></i>Inscribirse
       </a>
     </div>

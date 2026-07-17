@@ -12,7 +12,7 @@ export interface CuposResponse {
   providedIn: 'root'
 })
 export class ActividadesService {
-  private apiUrl = 'https://api.utpbiblio.dpdns.org/api/actividades';
+  private apiUrl = 'http://localhost:8080/api/actividades';
 
   constructor(private http: HttpClient) {}
 

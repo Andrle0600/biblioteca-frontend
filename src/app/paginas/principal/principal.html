@@ -1,8 +1,9 @@
     <!-- Barra de busqueda-->
     <div class="container mt-5 text-center">
         <h2 class="mb-4">Bienvenido al portal</h2>
-        <form class="d-flex search-bar" role="search">
-            <input class="form-control me-2" type="search" placeholder="Buscar Libros..." aria-label="Buscar">
+        <form class="d-flex search-bar" role="search" (ngSubmit)="buscarLibro()">
+            <input class="form-control me-2" type="search" placeholder="Buscar Libros..."
+                   aria-label="Buscar" [(ngModel)]="searchTerm" name="searchTerm">
             <button class="btn custom-search-btn" type="submit">
                 <i class="bi bi-search"></i>
             </button>

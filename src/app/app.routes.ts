@@ -72,6 +72,10 @@ export const routes: Routes = [
             {
                 path: 'mis-reservas',
                 component: MisReservas
+            },
+            {
+                path: 'faq',
+                loadComponent: () => import('./paginas/faq/faq').then(m => m.FaqComponent)
             }
         ]
     }

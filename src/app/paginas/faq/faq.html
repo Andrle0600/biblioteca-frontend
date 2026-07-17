@@ -1,0 +1,55 @@
+<div class="container my-5 faq-container">
+  <div class="text-center mb-5">
+    <h1 class="display-5 fw-bold text-blue-title">Preguntas Frecuentes (FAQ)</h1>
+    <p class="lead text-muted">Encuentre respuestas rápidas a sus dudas sobre el sistema de la Biblioteca Municipal de Ate.</p>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-9">
+      <!-- Loop over categories -->
+      <div *ngFor="let cat of categories; let catIndex = index" class="category-block mb-5">
+        <h2 class="category-title h4 fw-bold mb-3 pb-2 border-bottom text-primary d-flex align-items-center">
+          <span class="category-icon-wrapper me-2 d-flex align-items-center justify-content-center">
+            <i class="bi bi-patch-question-fill"></i>
+          </span>
+          {{ cat.title }}
+        </h2>
+
+        <!-- Accordion container per category -->
+        <div class="accordion custom-accordion" [id]="cat.id">
+          
+          <!-- Loop over questions inside category -->
+          <div *ngFor="let q of cat.questions; let qIndex = index" class="accordion-item" [id]="q.id">
+            
+            <h3 class="accordion-header">
+              <button 
+                type="button" 
+                class="accordion-button" 
+                [class.collapsed]="!q.isOpen"
+                (click)="toggleQuestion(catIndex, qIndex)"
+                [attr.aria-expanded]="q.isOpen"
+                [attr.aria-controls]="'collapse-' + q.id"
+                [id]="'heading-' + q.id">
+                <span class="me-2 text-primary font-weight-bold">?</span>
+                {{ q.question }}
+              </button>
+            </h3>
+
+            <div 
+              [id]="'collapse-' + q.id" 
+              class="accordion-collapse collapse" 
+              [class.show]="q.isOpen"
+              role="region" 
+              [attr.aria-labelledby]="'heading-' + q.id">
+              <div class="accordion-body">
+                <p class="mb-0 text-dark-content" [innerHTML]="q.answer"></p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

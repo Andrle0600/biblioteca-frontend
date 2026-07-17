@@ -8,7 +8,7 @@ import { Usuario } from '../dashboard/usuarios/usuario.model';
   providedIn: 'root'
 })
 export class UsuariosService {
-  private apiUrl = 'https://api.utpbiblio.dpdns.org/api/usuarios';
+  private apiUrl = 'http://localhost:8080/api/usuarios';
 
   constructor(private http: HttpClient) {}
 

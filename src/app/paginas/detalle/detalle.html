@@ -28,9 +28,13 @@
 
         <button *ngIf="authService.isAuthenticated(); else loginButton" class="btn btn-purple w-100"
           [routerLink]="['/prestamo', libro.slug]"
-          [disabled]="contarDisponibles() === 0">
+          [disabled]="contarDisponibles() === 0 || tieneReservaActiva">
           Solicitar préstamo
         </button>
+
+        <div *ngIf="authService.isAuthenticated() && tieneReservaActiva" class="alert alert-warning mt-2 small p-2 text-center">
+          <i class="bi bi-exclamation-triangle-fill"></i> Ya tiene un préstamo activo o reserva pendiente. Devuélvalo o cancélelo primero.
+        </div>
 
         <ng-template #loginButton>
           <button type="button" class="btn btn-purple w-100" data-bs-toggle="modal" data-bs-target="#loginModal">

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, ElementRef } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
@@ -15,12 +15,21 @@ export class DashboardNavbar {
 
   currentFontSize$!: Observable<FontSize>;
   mobileMenuOpen = false;
+  accessibilityDropdownOpen = false;
 
   constructor(
     private authService: AuthService,
-    public fontSizeService: FontSizeService
+    public fontSizeService: FontSizeService,
+    private elRef: ElementRef
   ){
     this.currentFontSize$ = fontSizeService.currentSize$;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.elRef.nativeElement.contains(event.target)) {
+      this.accessibilityDropdownOpen = false;
+    }
   }
 
   logout() {
@@ -33,5 +42,9 @@ export class DashboardNavbar {
 
   toggleMobileFontMenu() {
     this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  toggleAccessibilityDropdown() {
+    this.accessibilityDropdownOpen = !this.accessibilityDropdownOpen;
   }
 }

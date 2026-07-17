@@ -1,0 +1,92 @@
+.faq-container {
+  max-width: 900px;
+}
+
+.text-blue-title {
+  color: #007bff;
+}
+
+.category-block {
+  margin-bottom: 2.5rem;
+}
+
+.category-title {
+  color: #007bff !important;
+  font-size: 1.35rem;
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 0.5rem;
+
+  .category-icon-wrapper {
+    width: 32px;
+    height: 32px;
+    background-color: rgba(0, 123, 255, 0.1);
+    color: #007bff;
+    border-radius: 50%;
+    font-size: 1.1rem;
+  }
+}
+
+.custom-accordion {
+  .accordion-item {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+
+    &:hover {
+      box-shadow: 0 4px 8px rgba(0, 123, 255, 0.05);
+      border-color: rgba(0, 123, 255, 0.25);
+    }
+  }
+
+  .accordion-header {
+    margin: 0;
+  }
+
+  .accordion-button {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #495057;
+    padding: 1.1rem 1.25rem;
+    background-color: #fff;
+    border: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    &:not(.collapsed) {
+      background-color: rgba(0, 123, 255, 0.04);
+      color: #007bff;
+      box-shadow: none;
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.15);
+      border-color: rgba(0, 123, 255, 0.5);
+    }
+
+    &::after {
+      filter: grayscale(1) opacity(0.6);
+      transition: transform 0.2s ease;
+    }
+
+    &:not(.collapsed)::after {
+      filter: none;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23007bff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    }
+  }
+
+  .accordion-body {
+    padding: 1.25rem;
+    background-color: #fcfcfd;
+    border-top: 1px solid #f1f3f5;
+    font-size: 0.975rem;
+    line-height: 1.6;
+    color: #495057;
+
+    strong {
+      color: #212529;
+    }
+  }
+}

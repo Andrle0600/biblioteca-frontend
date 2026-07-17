@@ -56,15 +56,20 @@
         <i class="bi bi-calendar-check-fill fs-5 mt-1 text-primary"></i>
           <div class="alert-body">
             <p class="mb-1">Recuerde devolver el libro antes del: <strong>{{ fechaDevolucion | date:"d 'de' MMMM" }}</strong>.</p>
-            <p class="mb-0 small">Evite posibles <a href="#" class="alert-link">sanciones</a> por devolución tardía.</p>
+            <p class="mb-0 small">Evite posibles <a [routerLink]="['/faq']" fragment="sancion-devolucion-tardia" class="alert-link">sanciones</a> por devolución tardía.</p>
           </div>
       </div>
+    </div>
+
+    <!-- Alerta de reserva activa limit -->
+    <div *ngIf="tieneReservaActiva" class="alert alert-danger mt-3 mb-3 no-imprimir">
+      <i class="bi bi-exclamation-octagon-fill"></i> <strong>Límite de reserva excedido:</strong> Ya tiene un préstamo activo o reserva pendiente (no devuelto). Debe devolver su ejemplar actual o cancelar su reserva pendiente antes de realizar una nueva reserva.
     </div>
 
     <!-- Botones de acción -->
     <div class="d-flex gap-2 no-imprimir">
       <button type="submit" class="btn btn-primary flex-grow-1"
-        [disabled]="!reservaForm.form.valid || isLoading || reservaSuccess">
+        [disabled]="!reservaForm.form.valid || isLoading || reservaSuccess || tieneReservaActiva">
         <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
         {{ reservaSuccess ? 'Reserva Confirmada' : (isLoading ? 'Procesando...' : 'Confirmar Reserva') }}
       </button>

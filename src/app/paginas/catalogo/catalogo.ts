@@ -3,8 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LibrosService } from '../../services/libros';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterLink } from '@angular/router';
-import { Router } from '@angular/router';
+import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 declare var bootstrap: any;
 import { Libro } from '../../dashboard/libros/libro.model';
 
@@ -22,7 +21,7 @@ export class Catalogo implements OnInit {
 
   filtroForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private librosService: LibrosService, private router: Router) { }
+  constructor(private fb: FormBuilder, private librosService: LibrosService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.filtroForm = this.fb.group({
@@ -33,7 +32,15 @@ export class Catalogo implements OnInit {
     });
 
     this.cargarFiltros();
-    this.cargarLibros();
+
+    // Leer query param 'titulo' proveniente de la búsqueda en la página principal
+    const tituloParam = this.route.snapshot.queryParamMap.get('titulo');
+    if (tituloParam && tituloParam.trim().length > 0) {
+      this.filtroForm.patchValue({ titulo: tituloParam.trim() });
+      this.filtrar();
+    } else {
+      this.cargarLibros();
+    }
   }
 
   cargarFiltros(): void {

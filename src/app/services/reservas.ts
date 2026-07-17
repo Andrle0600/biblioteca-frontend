@@ -9,7 +9,7 @@ import { Ejemplar } from '../dashboard/ejemplares/ejemplar.model';
 })
 export class ReservasService {
 
-  private apiUrl = 'https://api.utpbiblio.dpdns.org/api/reservas';
+  private apiUrl = 'http://localhost:8080/api/reservas';
 
   constructor(private http: HttpClient) { }
 

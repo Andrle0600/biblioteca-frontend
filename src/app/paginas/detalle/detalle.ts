@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { LibrosService } from '../../services/libros';
 import { AuthService } from '../../services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-detalle',
@@ -12,9 +13,11 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './detalle.html',
   styleUrl: './detalle.scss'
 })
-export class Detalle implements OnInit {
+export class Detalle implements OnInit, OnDestroy {
   libro: any = null;
   ejemplares: any[] = [];
+  tieneReservaActiva: boolean = false;
+  private userSubscription!: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -32,6 +35,23 @@ export class Detalle implements OnInit {
         },
         error: (err) => console.error('Error cargando libro', err)
       });
+    }
+
+    this.userSubscription = this.authService.user$.subscribe({
+      next: (user) => {
+        if (user && user.reservas) {
+          this.tieneReservaActiva = user.reservas.some((r: any) => r.fechaRealDevolucion === null);
+        } else {
+          this.tieneReservaActiva = false;
+        }
+      },
+      error: (err) => console.error('Error cargando usuario en detalle:', err)
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
     }
   }
 

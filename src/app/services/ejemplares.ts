@@ -7,8 +7,8 @@ import { Ejemplar, EstadoEjemplar, Ubicacion } from '../dashboard/ejemplares/eje
   providedIn: 'root'
 })
 export class EjemplaresService {
-  private apiUrl = 'https://api.utpbiblio.dpdns.org/api/ejemplares';
-  private ubicacionesUrl = 'https://api.utpbiblio.dpdns.org/api/ubicaciones';
+  private apiUrl = 'http://localhost:8080/api/ejemplares';
+  private ubicacionesUrl = 'http://localhost:8080/api/ubicaciones';
 
   constructor(private http: HttpClient) { }
 

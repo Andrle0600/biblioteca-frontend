@@ -34,6 +34,7 @@ export class Prestamo implements OnInit {
   private userSubscription!: Subscription;
   isLoading = false;
   reservaSuccess = false;
+  tieneReservaActiva = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -72,6 +73,7 @@ export class Prestamo implements OnInit {
         next: (user) => {
           if (user) {
             this.usuario = user;
+            this.tieneReservaActiva = user.reservas?.some((r: any) => r.fechaRealDevolucion === null) ?? false;
           }
         },
         error: (err) => {
@@ -114,6 +116,11 @@ export class Prestamo implements OnInit {
   }
 
   private validarFormulario(): boolean {
+    if (this.tieneReservaActiva) {
+      alert('Ya tiene una reserva activa o un libro en préstamo. Debe devolverlo o cancelar su reserva pendiente antes de poder reservar otro libro.');
+      return false;
+    }
+
     if (!this.fechaRecojo) {
       alert('Por favor seleccione una fecha de recogida');
       return false;
