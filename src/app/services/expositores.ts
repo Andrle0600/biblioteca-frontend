@@ -7,7 +7,7 @@ import { Expositor } from '../dashboard/expositores/expositor.model';
   providedIn: 'root'
 })
 export class ExpositoresService {
-  private apiUrl = 'http://localhost:8080/api/expositores';
+  private apiUrl = 'https://api.utpbiblio.dpdns.org/api/expositores';
 
   constructor(private http: HttpClient) {}
 
