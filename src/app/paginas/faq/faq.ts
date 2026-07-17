@@ -79,13 +79,19 @@ export class FaqComponent implements OnInit, AfterViewInit {
         {
           id: 'sancion-devolucion-tardia',
           question: '¿Qué sucede si no devuelvo el libro a tiempo?',
-          answer: 'Podrá recibir una <strong>sanción temporal</strong> que le impedirá realizar nuevos préstamos hasta regularizar su situación. Para evitarlo, revise la fecha límite de devolución y consulte su historial en <strong>Mis Préstamos</strong> para verificar las fechas correspondientes.',
+          answer: 'Si devuelve el libro después de la fecha límite, el personal de biblioteca evaluará la situación y podrá aplicar una <strong>sanción leve</strong> o una <strong>sanción grave</strong>, dependiendo del atraso. Mientras su reserva no sea devuelta, no podrá solicitar un nuevo préstamo. Consulte la sección <strong>¿Cómo funcionan las sanciones?</strong> para más detalle.',
           isOpen: false
         },
         {
           id: 'sancion-libro-danado',
           question: '¿Qué ocurre si el libro se devuelve dañado?',
-          answer: 'Se considera daño cuando el ejemplar presenta deterioro ocasionado durante el préstamo: <strong>páginas dobladas o arrancadas</strong>, <strong>escritos o subrayados</strong> sobre el material, manchas, humedad, o cualquier alteración que afecte su estado original. Para evitarlo: manipule el libro con cuidado, no doble las páginas, no escriba sobre el material y manténgalo limpio y protegido. Si se detecta daño al momento de la devolución, la biblioteca aplicará la <strong>sanción correspondiente</strong>.',
+          answer: 'Se considera daño cuando el libro presenta deterioro ocasionado durante el préstamo: <strong>páginas dobladas, manchas, humedad</strong> u otras alteraciones menores, hasta casos más severos como <strong>hojas arrancadas o manchas irreversibles en múltiples páginas</strong>. El personal de biblioteca determinará si el daño es <strong>reparable</strong> o <strong>irreparable</strong> y aplicará la sanción correspondiente. Para evitarlo: manipule el libro con cuidado, no doble las páginas, no escriba sobre el material y manténgalo protegido mientras esté en su poder.',
+          isOpen: false
+        },
+        {
+          id: 'sancion-como-funciona',
+          question: '¿Cómo funcionan las sanciones?',
+          answer: 'Existen dos niveles según la gravedad del caso:<br><br><strong>Sanción leve</strong> (daño reparable a un libro): mientras el libro está en reparación, no podrá <strong>solicitar nuevos préstamos</strong>, pero sí podrá seguir inscribiéndose a actividades culturales con normalidad. Esta sanción se levanta cuando <strong>el personal confirma que el ejemplar fue reparado</strong> y puede volver a circular.<br><br><strong>Sanción grave</strong> (daño irreparable a libro o retraso severo en devolución): su <strong>cuenta será bloqueada por completo</strong>, y no podrá acceder a la plataforma para recibir algún servicio de la bliblioteca. La sitacuón se mantendrá hasta que resuelva la situación <strong>directamente con el personal de biblioteca</strong>.',
           isOpen: false
         }
       ]
@@ -140,7 +146,7 @@ export class FaqComponent implements OnInit, AfterViewInit {
     }
   ];
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.route.fragment.subscribe(fragment => {
@@ -161,10 +167,10 @@ export class FaqComponent implements OnInit, AfterViewInit {
 
   toggleQuestion(catIndex: number, qIndex: number): void {
     const isCurrentlyOpen = this.categories[catIndex].questions[qIndex].isOpen;
-    
+
     // Close other questions in same category
     this.categories[catIndex].questions.forEach(q => q.isOpen = false);
-    
+
     // Toggle current
     this.categories[catIndex].questions[qIndex].isOpen = !isCurrentlyOpen;
   }
